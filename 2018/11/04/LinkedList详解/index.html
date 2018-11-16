@@ -79,17 +79,17 @@
 
 
 
-<meta name="description" content="LinkedList详解&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;LinkedList和ArrayList集合一样，都是存储对象所用，。">
+<meta name="description" content="LinkedList简介&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;LinkedList和ArrayList集合一样，都是实现了Collenctoin接口，且都是存储对象所用，先说一个结论：  LinkedList跟其名字一样，是用双向链表结构实现的。LinkedList内部维护这 Node first和Node last两个元素。分别是链表的头部和尾部节点">
 <meta property="og:type" content="article">
 <meta property="og:title" content="LinkedList详解">
 <meta property="og:url" content="http://yoursite.com/2018/11/04/LinkedList详解/index.html">
 <meta property="og:site_name" content="泼墨成空">
-<meta property="og:description" content="LinkedList详解&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;LinkedList和ArrayList集合一样，都是存储对象所用，。">
+<meta property="og:description" content="LinkedList简介&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;LinkedList和ArrayList集合一样，都是实现了Collenctoin接口，且都是存储对象所用，先说一个结论：  LinkedList跟其名字一样，是用双向链表结构实现的。LinkedList内部维护这 Node first和Node last两个元素。分别是链表的头部和尾部节点">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2018-11-03T16:16:41.850Z">
+<meta property="og:updated_time" content="2018-11-05T04:01:07.926Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="LinkedList详解">
-<meta name="twitter:description" content="LinkedList详解&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;LinkedList和ArrayList集合一样，都是存储对象所用，。">
+<meta name="twitter:description" content="LinkedList简介&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;LinkedList和ArrayList集合一样，都是实现了Collenctoin接口，且都是存储对象所用，先说一个结论：  LinkedList跟其名字一样，是用双向链表结构实现的。LinkedList内部维护这 Node first和Node last两个元素。分别是链表的头部和尾部节点">
 
 
 
@@ -160,7 +160,7 @@
       </a>
     </div>
       
-        <p class="site-subtitle">菜鸟程序员</p>
+        <p class="site-subtitle">菜鸟的空间</p>
       
   </div>
 
@@ -216,6 +216,16 @@
               <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
             
             归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-schedule">
+          <a href="/schedule/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-calendar"></i> <br>
+            
+            学习计划
           </a>
         </li>
       
@@ -341,7 +351,35 @@
       
 
       
-        <h1 id="LinkedList详解"><a href="#LinkedList详解" class="headerlink" title="LinkedList详解"></a>LinkedList详解</h1><p><html>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</html>LinkedList和ArrayList集合一样，都是存储对象所用，。</p>
+        <h1 id="LinkedList简介"><a href="#LinkedList简介" class="headerlink" title="LinkedList简介"></a>LinkedList简介</h1><p><html>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</html>LinkedList和ArrayList集合一样，都是实现了Collenctoin接口，且都是存储对象所用，先说一个结论：</p>
+<blockquote>
+<p>LinkedList跟其名字一样，是用双向链表结构实现的。LinkedList内部维护这 Node<e> first和Node<e> last两个元素。分别是链表的头部和尾部节点。</e></e></p>
+</blockquote>
+<p><html>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</html>虽然LinkedList和ArrayList都是按照顺序存储元素，但是LinkedList还具备ArrayList没有的方法，LinkedList的主要常用方法如下：<br>(1) add(E e)：添加一个元素，添加到链表末尾。<br>(2) addAll(List list)：添加一个集合到链表，链表末尾开始循环添加。<br>(3) size()：返回链表长度，即LinkedList大小。<br>(4) addFirst(E e)：将元素添加到链表头部。<br>(5) addLast(E e)：将元素添加到链表末尾。<br>(6) clean()：清空链表，会把每个节点的next都断开。<br>(7) contains(E e)：判断链表是否包含一个元素。<br>(8) element()：获取链表的头部，即第一个元素。<br>(9) get(int index)：获取指定位置的元素。<br>(10) offer(E e)：添加一个元素到链表尾部，本质是调用add()方法。<br>(11) getFirst()：获取链表头部元素。<br>(12) getLast()：获取链表末尾元素。<br>(13) indexOf(E e)：获取指定元素的下标。<br>(14) peek()：获取链表头部第一个元素，不从链表中删除。<br>(15) poll()：获取链表头部第一个元素，且把这个元素从链表中删除。<br>(16) pop()：去除并删除链表中头部第一个元素。<br>(17) push(E e)：添加一个元素到链表头部。<br>(18) remove(E e)：删除指定的元素。</p>
+<hr>
+<p><html>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</html>下面我们开始讲LinkedList的内部实现原理，依然是通过分析常用的方法来讲解。</p>
+<h1 id="add-方法的实现"><a href="#add-方法的实现" class="headerlink" title="add()方法的实现"></a>add()方法的实现</h1><p><html>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</html>add()方法就是将元素添加到链表，并且是放入到链表的末尾，源码如下:</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">add</span><span class="params">(E e)</span> </span>&#123;</span><br><span class="line">    linkLast(e); <span class="comment">//调用linkLast()添加到末尾</span></span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">true</span>;  <span class="comment">//如果上面没有报异常就直接返回true了</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">linkLast</span><span class="params">(E e)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">final</span> Node&lt;E&gt; l = last;</span><br><span class="line">    <span class="keyword">final</span> Node&lt;E&gt; newNode = <span class="keyword">new</span> Node&lt;&gt;(l, e, <span class="keyword">null</span>);</span><br><span class="line">    last = newNode;</span><br><span class="line">    <span class="keyword">if</span> (l == <span class="keyword">null</span>)</span><br><span class="line">        first = newNode;</span><br><span class="line">    <span class="keyword">else</span></span><br><span class="line">        l.next = newNode;</span><br><span class="line">    size++;</span><br><span class="line">    modCount++;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><html>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</html>可以看到add方法调用了linkLast方法，在第8行，通过传进来的元素构建了一个新的节点，第10行代码的判断如果last是空说明是第一次加入元素还没有节点，因此这里创建的newNode就作为头部节点了(第11行代码)。如果不是第一次添加元素，之前已经有链表了，那就将新创建的节点加到last节点的next上“挂起来”，于此同时链表长度size++，此时就完成了元素的添加了。</p>
+<p><html>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</html>从add方法里我们可以看到元素的存储是通过构建Node对象存储的，我们看下Node类是如何实现的：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">private</span> <span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">Node</span>&lt;<span class="title">E</span>&gt; </span>&#123;</span><br><span class="line">     E item;   <span class="comment">//我们存放的元素</span></span><br><span class="line">     Node&lt;E&gt; next;  <span class="comment">//下一个节点</span></span><br><span class="line">     Node&lt;E&gt; prev;  <span class="comment">//上一个节点</span></span><br><span class="line"></span><br><span class="line">     Node(Node&lt;E&gt; prev, E element, Node&lt;E&gt; next) &#123;</span><br><span class="line">         <span class="keyword">this</span>.item = element;  </span><br><span class="line">         <span class="keyword">this</span>.next = next;</span><br><span class="line">         <span class="keyword">this</span>.prev = prev;</span><br><span class="line">     &#125;</span><br><span class="line"> &#125;</span><br></pre></td></tr></table></figure>
+<p><html>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</html>如上就是一个双向链表的节点结构。代码不多，很简单，至此add方法我们已经讲完了，很简单，也没啥夺得可以说了。</p>
+<hr>
+<h1 id="get-int-index-方法的实现"><a href="#get-int-index-方法的实现" class="headerlink" title="get(int index)方法的实现"></a>get(int index)方法的实现</h1><p><html>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</html>此方法对于LinkedList(所有链表结构)来说是最大的弱点，因为其结构的特殊性(并不是用数组存储元素),他并没有下标，更不能通过下标直接获取到元素，他只能通过遍历不停的比较是否找到了元素，唯一能优化的地方就是优化查找的算法，如下就是get(int index)的源码：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> E <span class="title">get</span><span class="params">(<span class="keyword">int</span> index)</span> </span>&#123;</span><br><span class="line">    checkElementIndex(index);  <span class="comment">//先检查是否越界了</span></span><br><span class="line">    <span class="keyword">return</span> node(index).item;  <span class="comment">//直接调用node()方法返回的node元素的item。</span></span><br><span class="line">    </span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function">Node&lt;E&gt; <span class="title">node</span><span class="params">(<span class="keyword">int</span> index)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (index &lt; (size &gt;&gt; <span class="number">1</span>)) &#123;<span class="comment">//如果要找的元素在数组的前1/2</span></span><br><span class="line">        Node&lt;E&gt; x = first;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; index; i++) <span class="comment">//开始从头遍历查找</span></span><br><span class="line">            x = x.next;</span><br><span class="line">        <span class="keyword">return</span> x;</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;  <span class="comment">//要找的元素在数组的后1/2</span></span><br><span class="line">        Node&lt;E&gt; x = last;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = size - <span class="number">1</span>; i &gt; index; i--)  <span class="comment">//开始从尾部遍历查找</span></span><br><span class="line">            x = x.prev;</span><br><span class="line">        <span class="keyword">return</span> x;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><html>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</html>从上面的代码可以看出，get()方法已经最大程度的优化了查找的时间复杂度，就是根据要获取的元素的位置从不同的地方遍历查找，这样可以节省一些时间。</p>
+<p><html>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</html>了接了LinkedList的get()方法原理后我们应该知道，以后不要通过循环遍历使用get(int index)来取元素，如下使用方法强烈不推荐：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">LinkedList&lt;String&gt; list = (LinkedList&lt;String&gt;) Stream.of(<span class="string">"1"</span>,<span class="string">"2"</span>,<span class="string">"3"</span>).collect(Collectors.toList());</span><br><span class="line">  <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>;i&lt;list.size();i++)&#123;</span><br><span class="line">      String str = list.get(i);  <span class="comment">//这里每次使用get()方法内部会再次使用for循环查找</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h1 id="remove-方法的实现"><a href="#remove-方法的实现" class="headerlink" title="remove()方法的实现"></a>remove()方法的实现</h1><p><html>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</html> remove()方法有两个，一个是无参，默认是删除第一个元素，这样的删除就很简单了，就把第一个Node设置为空即可。remove(E e)就比较麻烦了，如下就是remove(E e)的实现：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">remove</span><span class="params">(Object o)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (o == <span class="keyword">null</span>) &#123; <span class="comment">// 如果是null，就要零星处理，不然会报异常</span></span><br><span class="line">        <span class="keyword">for</span> (Node&lt;E&gt; x = first; x != <span class="keyword">null</span>; x = x.next) &#123;</span><br><span class="line">            <span class="keyword">if</span> (x.item == <span class="keyword">null</span>) &#123;</span><br><span class="line">                unlink(x);</span><br><span class="line">                <span class="keyword">return</span> <span class="keyword">true</span>;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        <span class="keyword">for</span> (Node&lt;E&gt; x = first; x != <span class="keyword">null</span>; x = x.next) &#123;</span><br><span class="line">            <span class="keyword">if</span> (o.equals(x.item)) &#123;</span><br><span class="line">                unlink(x);</span><br><span class="line">                <span class="keyword">return</span> <span class="keyword">true</span>;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">false</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><html>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</html> remove(int index)方法如上所示，他会遍历查找到该元素然后调用unlink()方法，看下unlink()方法如下：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br></pre></td><td class="code"><pre><span class="line">    <span class="function">E <span class="title">unlink</span><span class="params">(Node&lt;E&gt; x)</span> </span>&#123;</span><br><span class="line">        <span class="comment">// assert x != null;</span></span><br><span class="line">        <span class="keyword">final</span> E element = x.item;</span><br><span class="line">        <span class="keyword">final</span> Node&lt;E&gt; next = x.next;</span><br><span class="line">        <span class="keyword">final</span> Node&lt;E&gt; prev = x.prev;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (prev == <span class="keyword">null</span>) &#123;</span><br><span class="line">            first = next;</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            prev.next = next;</span><br><span class="line">            x.prev = <span class="keyword">null</span>;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (next == <span class="keyword">null</span>) &#123;</span><br><span class="line">            last = prev;</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            next.prev = prev;</span><br><span class="line">            x.next = <span class="keyword">null</span>;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        x.item = <span class="keyword">null</span>;</span><br><span class="line">        size--;</span><br><span class="line">        modCount++;</span><br><span class="line">        <span class="keyword">return</span> element;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">```java</span><br><span class="line">&lt;html&gt;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&lt;/html&gt; 此方法逻辑很简单，就是让要删除的元素的后节点挂在前一个节点上，然后把自己节点的x的item和next设置为null即可。</span><br><span class="line">---</span><br><span class="line"># addFirst()方法的实现</span><br><span class="line">&lt;html&gt;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&lt;/html&gt;addFirst()就是把元素添加到链表的第一行，他的实现也很简单，就是把现有的链表的第一个元素挂在新建的节点的next上即可：</span><br><span class="line"></span><br><span class="line">```java</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">addFirst</span><span class="params">(E e)</span> </span>&#123;</span><br><span class="line">        linkFirst(e);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">linkFirst</span><span class="params">(E e)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">final</span> Node&lt;E&gt; f = first;</span><br><span class="line">        <span class="keyword">final</span> Node&lt;E&gt; newNode = <span class="keyword">new</span> Node&lt;&gt;(<span class="keyword">null</span>, e, f); <span class="comment">//创建一个新的节点，因为是作为第一个元素所以其prev是null，next是目前的first。</span></span><br><span class="line">        first = newNode;</span><br><span class="line">        <span class="keyword">if</span> (f == <span class="keyword">null</span>)</span><br><span class="line">            last = newNode;</span><br><span class="line">        <span class="keyword">else</span></span><br><span class="line">            f.prev = newNode;</span><br><span class="line">        size++;</span><br><span class="line">        modCount++;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+<p><html>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</html> addLast()和addFirst()原理一样，都是赋值”挂钩”的操作。</p>
+<hr>
+<h1 id="LinkedList的序列化"><a href="#LinkedList的序列化" class="headerlink" title="LinkedList的序列化"></a>LinkedList的序列化</h1><p><html>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</html>和ArrayList一样，LinkedList也实现了自己的序列化手段，他也有writeObject()和readObject()方法。LinkedList的first和last都是transient类型的。</p>
+<p><html>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</html>至此，LinkedList的实现和其原理我们便也掌握了，双向链表结构简单，操作也就那些操作，所以没啥可以多讲的。</p>
+<hr>
+<p>总结<br>（1）LinkedList是双向链表实现的。<br>（2）LinkedList的大小在理论上没有上限，他不存在数组扩容的操作。<br>（3）LinkedList数组不要使用遍历+get(int index)来操作，其时间复杂度机器的大。<br>（4）add()方法默认是将元素添加到链表结尾。</p>
 
       
     </div>
@@ -376,8 +414,8 @@
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2018/11/05/Activity详解/" rel="prev" title="掌握泛型">
-                掌握泛型 <i class="fa fa-chevron-right"></i>
+              <a href="/2018/11/04/Vector详解/" rel="prev" title="Vector详解">
+                Vector详解 <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
@@ -445,7 +483,7 @@
           <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
             
               <p class="site-author-name" itemprop="name">泼墨成空</p>
-              <p class="site-description motion-element" itemprop="description">菜鸟程序员</p>
+              <p class="site-description motion-element" itemprop="description">只是一个菜鸟</p>
           </div>
 
           <nav class="site-state motion-element">
@@ -455,7 +493,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">10</span>
+                  <span class="site-state-item-count">21</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -466,7 +504,7 @@
               
               <div class="site-state-item site-state-categories">
                 <a href="/categories/index.html">
-                  <span class="site-state-item-count">6</span>
+                  <span class="site-state-item-count">4</span>
                   <span class="site-state-item-name">分类</span>
                 </a>
               </div>
@@ -501,7 +539,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#LinkedList详解"><span class="nav-number">1.</span> <span class="nav-text">LinkedList详解</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#LinkedList简介"><span class="nav-number">1.</span> <span class="nav-text">LinkedList简介</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#add-方法的实现"><span class="nav-number">2.</span> <span class="nav-text">add()方法的实现</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#get-int-index-方法的实现"><span class="nav-number">3.</span> <span class="nav-text">get(int index)方法的实现</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#remove-方法的实现"><span class="nav-number">4.</span> <span class="nav-text">remove()方法的实现</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#LinkedList的序列化"><span class="nav-number">5.</span> <span class="nav-text">LinkedList的序列化</span></a></li></ol></div>
             
 
           </div>
@@ -531,15 +569,9 @@
 </div>
 
 
-  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
 
 
 
-  <span class="post-meta-divider">|</span>
-
-
-
-  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Pisces</a> v5.1.4</div>
 
 
 
@@ -586,11 +618,22 @@
   
 
 
+  
 
 
 
+  
+  
 
 
+
+  
+  
+
+
+
+  
+  
 
 
 
@@ -624,6 +667,31 @@
   
   
     <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/canvas-nest/canvas-nest.min.js"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/three/three.min.js"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/three/three-waves.min.js"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/three/canvas_lines.min.js"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/three/canvas_sphere.min.js"></script>
   
 
 
