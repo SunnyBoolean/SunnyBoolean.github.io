@@ -1,0 +1,854 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Hexo, NexT">
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;很早就想总结关于RecycleView的文章，但是一直各种拖，没时间，现在才总结出来，虽然迟到了点，但是也算是有个总结吧，本文的代码都在我的GeoUiBox(点我查看)项目里。 &amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;废话就不多说了，直接上代码，撸功能了(注意，本文里gi">
+<meta property="og:type" content="article">
+<meta property="og:title" content="RecyclerView的使用">
+<meta property="og:url" content="http://yoursite.com/2018/11/13/RecyclerView的使用/index.html">
+<meta property="og:site_name" content="泼墨成空">
+<meta property="og:description" content="&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;很早就想总结关于RecycleView的文章，但是一直各种拖，没时间，现在才总结出来，虽然迟到了点，但是也算是有个总结吧，本文的代码都在我的GeoUiBox(点我查看)项目里。 &amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;废话就不多说了，直接上代码，撸功能了(注意，本文里gi">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://bmob-cdn-22219.b0.upaiyun.com/2018/11/27/3c4674a34071960c80d49ba2c1537dbc.gif">
+<meta property="og:image" content="http://bmob-cdn-22219.b0.upaiyun.com/2018/11/27/dae4f8b9401c11338001e4071f559546.gif">
+<meta property="og:image" content="http://bmob-cdn-22219.b0.upaiyun.com/2018/11/27/fefdb90f40e7e03f80921dbe56bbd2ae.gif">
+<meta property="og:image" content="http://bmob-cdn-22219.b0.upaiyun.com/2018/11/27/4a95ce3340fa5ec080de646554e3a080.gif">
+<meta property="og:image" content="http://bmob-cdn-22219.b0.upaiyun.com/2018/11/27/68013f9440a2db1980469c06cca9db57.gif">
+<meta property="og:image" content="http://bmob-cdn-22219.b0.upaiyun.com/2018/11/27/90cc103e403be96c807ac0b862ee757b.gif">
+<meta property="og:image" content="http://bmob-cdn-22219.b0.upaiyun.com/2018/11/27/329b6d5b40ce112780b1f6e4c466c4d1.gif">
+<meta property="og:image" content="http://bmob-cdn-22219.b0.upaiyun.com/2018/11/27/997454c4404c6acf803da4745f5d5306.gif">
+<meta property="og:image" content="http://bmob-cdn-22219.b0.upaiyun.com/2018/11/27/35fcb0db40b6a0fd80704e9a1687cc2f.gif">
+<meta property="og:image" content="http://bmob-cdn-22219.b0.upaiyun.com/2018/11/28/845cde6640c0528c80f462bb1f7938a3.gif">
+<meta property="og:updated_time" content="2018-11-28T07:34:38.187Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="RecyclerView的使用">
+<meta name="twitter:description" content="&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;很早就想总结关于RecycleView的文章，但是一直各种拖，没时间，现在才总结出来，虽然迟到了点，但是也算是有个总结吧，本文的代码都在我的GeoUiBox(点我查看)项目里。 &amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;废话就不多说了，直接上代码，撸功能了(注意，本文里gi">
+<meta name="twitter:image" content="http://bmob-cdn-22219.b0.upaiyun.com/2018/11/27/3c4674a34071960c80d49ba2c1537dbc.gif">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2018/11/13/RecyclerView的使用/">
+
+
+
+
+
+  <title>RecyclerView的使用 | 泼墨成空</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope="" itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">泼墨成空</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">要想无心很容易，在乎才需要勇气。</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br>
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-schedule">
+          <a href="/schedule/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-calendar"></i> <br>
+            
+            学习计划
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/11/13/RecyclerView的使用/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="泼墨成空">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="泼墨成空">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">RecyclerView的使用</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-11-13T18:41:09+08:00">
+                2018-11-13
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
+                  <a href="/categories/Android控件/" itemprop="url" rel="index">
+                    <span itemprop="name">Android控件</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p><html>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</html><br>很早就想总结关于RecycleView的文章，但是一直各种拖，没时间，现在才总结出来，虽然迟到了点，但是也算是有个总结吧，本文的代码都在我的<a href="https://github.com/SunnyBoolean/GeoUiBox" target="_blank" rel="noopener">GeoUiBox(点我查看)</a>项目里。</p>
+<p><html>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</html>废话就不多说了，直接上代码，撸功能了<strong>(注意，本文里gif动图比较多，手机流量党慎重浏览！)</strong>。</p>
+<h1 id="基础使用"><a href="#基础使用" class="headerlink" title="基础使用"></a>基础使用</h1><p><html>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</html>RecycleView支持线性(水平和垂直)、网格、瀑布流几种方式，其Adapter也跟ListView不一样。</p>
+<h2 id="水平线性列表"><a href="#水平线性列表" class="headerlink" title="水平线性列表"></a>水平线性列表</h2><p><html>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</html>第一步，我们在app.gradle里添加RecyclerView的依赖：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">compile <span class="string">'com.android.support:appcompat-v7:25.3.1'</span></span><br></pre></td></tr></table></figure>
+<p><html>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</html>第二步，创建Activity并编写布局文件：</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?xml version="1.0" encoding="utf-8"?&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">LinearLayout</span> <span class="attr">xmlns:android</span>=<span class="string">"http://schemas.android.com/apk/res/android"</span></span></span><br><span class="line"><span class="tag">    <span class="attr">android:layout_width</span>=<span class="string">"match_parent"</span></span></span><br><span class="line"><span class="tag">    <span class="attr">android:layout_height</span>=<span class="string">"match_parent"</span></span></span><br><span class="line"><span class="tag">    <span class="attr">android:focusableInTouchMode</span>=<span class="string">"true"</span></span></span><br><span class="line"><span class="tag">    <span class="attr">android:focusable</span>=<span class="string">"true"</span></span></span><br><span class="line"><span class="tag">    <span class="attr">android:orientation</span>=<span class="string">"vertical"</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">android.support.v7.widget.RecyclerView</span></span></span><br><span class="line"><span class="tag">        <span class="attr">android:id</span>=<span class="string">"@+id/recycle_view"</span></span></span><br><span class="line"><span class="tag">        <span class="attr">android:layout_marginTop</span>=<span class="string">"10dp"</span></span></span><br><span class="line"><span class="tag">        <span class="attr">android:layout_width</span>=<span class="string">"match_parent"</span></span></span><br><span class="line"><span class="tag">        <span class="attr">android:layout_height</span>=<span class="string">"wrap_content"</span> /&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">LinearLayout</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p><html>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</html>第三步，准备数据，这个数据就是我们RecyclerView要显示的数据：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//列表显示实体类</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">RecycleDataBean</span> <span class="keyword">implements</span> <span class="title">Serializable</span></span>&#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">int</span> type;</span><br><span class="line">    <span class="keyword">public</span>  String title;</span><br><span class="line">    <span class="keyword">public</span> String content;</span><br><span class="line">    <span class="keyword">public</span> String imgUrl;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">RecycleDataBean</span><span class="params">(<span class="keyword">int</span> type, String title, String content,String imgUrl)</span></span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.type=type;</span><br><span class="line">        <span class="keyword">this</span>.title=title;</span><br><span class="line">        <span class="keyword">this</span>.content=content;</span><br><span class="line">        <span class="keyword">this</span>.imgUrl = imgUrl;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> List&lt;RecycleDataBean&gt; mDatas = <span class="keyword">new</span> ArrayList&lt;&gt;();</span><br><span class="line"></span><br><span class="line">    <span class="comment">//初始化数据</span></span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">initData</span><span class="params">()</span> </span>&#123;</span><br><span class="line">       mDatas.add(<span class="keyword">new</span> RecycleDataBean(-<span class="number">1</span>, <span class="string">"这是第一个标题"</span>, <span class="string">"没有问题的"</span>, <span class="string">"http://bmob-cdn-22219.b0.upaiyun.com/2018/11/05/5c0e4b7f405009d880b28c3e1e71b377.jpg"</span>));</span><br><span class="line">        mDatas.add(<span class="keyword">new</span> RecycleDataBean(-<span class="number">1</span>, <span class="string">"这是第二个标题"</span>, <span class="string">"国家主席习近平今日已经抵达乌班图开始访问"</span>, <span class="string">"http://bmob-cdn-22219.b0.upaiyun.com/2018/11/05/99cde58e40faad81806513e34517d521.jpg"</span>));</span><br><span class="line">        mDatas.add(<span class="keyword">new</span> RecycleDataBean(-<span class="number">1</span>, <span class="string">"这是第三个标题"</span>, <span class="string">"受台湾海峡地震影响，G3001次（福州至香港西九龙）、G3003次（厦门至香港西九龙）列车不同程度晚点。铁路部门提醒，旅客朋友可关注站车广播公告，或致电12306客服热线查询，"</span>, <span class="string">"http://bmob-cdn-22219.b0.upaiyun.com/2018/11/05/6c8f212d404d69c38048e8edb55783b4.jpg"</span>));</span><br><span class="line">        mDatas.add(<span class="keyword">new</span> RecycleDataBean(-<span class="number">1</span>, <span class="string">"这是第四个标题"</span>, <span class="string">"测试一下数据是不是正常的，如果不正常就要替换掉了"</span>, <span class="string">"http://bmob-cdn-22219.b0.upaiyun.com/2018/11/05/5a131e9a40fa729d8073a1c32aad9a7a.jpg"</span>));</span><br><span class="line">        mDatas.add(<span class="keyword">new</span> RecycleDataBean(-<span class="number">1</span>, <span class="string">"这是第八个标题"</span>, <span class="string">"准备好了吧"</span>, <span class="string">"http://bmob-cdn-22219.b0.upaiyun.com/2018/11/05/5c0e4b7f405009d880b28c3e1e71b377.jpg"</span>));</span><br><span class="line">        mDatas.add(<span class="keyword">new</span> RecycleDataBean(-<span class="number">1</span>, <span class="string">"这是第五个标题"</span>, <span class="string">"6786666"</span>, <span class="string">"http://bmob-cdn-22219.b0.upaiyun.com/2018/11/05/d2ffa47d406ce16d800d624e34bd10f6.jpg"</span>));</span><br><span class="line">        mDatas.add(<span class="keyword">new</span> RecycleDataBean(-<span class="number">1</span>, <span class="string">"这是第六个标题"</span>, <span class="string">"这是第六条内容"</span>, <span class="string">"http://bmob-cdn-22219.b0.upaiyun.com/2018/11/05/2218a148407300c180305436e75edf6c.jpg"</span>));</span><br><span class="line">        mDatas.add(<span class="keyword">new</span> RecycleDataBean(-<span class="number">1</span>, <span class="string">"这是第七个标题"</span>, <span class="string">"还没有开始"</span>, <span class="string">"http://bmob-cdn-22219.b0.upaiyun.com/2018/11/05/f1cbe50440d8b161800a5c5a3fee303b.jpg"</span>));</span><br><span class="line">        mDatas.add(<span class="keyword">new</span> RecycleDataBean(-<span class="number">1</span>, <span class="string">"这是第八个标题"</span>, <span class="string">"准备好了吧"</span>, <span class="string">"http://bmob-cdn-22219.b0.upaiyun.com/2018/11/05/5c0e4b7f405009d880b28c3e1e71b377.jpg"</span>));</span><br><span class="line"></span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+<p><html>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</html>第四步，写Adapter，RecyclerView的Adapter和ListView的不一样，RecyclerView的Adapter是需要继承RecyclerView.Adapter，且ViewHolder也必须RecyclerView.ViewHolder：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">SelfeRecycleAdapter</span> <span class="keyword">extends</span> <span class="title">RecyclerView</span>.<span class="title">Adapter</span>&lt;<span class="title">SelfeRecycleAdapter</span>.<span class="title">SelfeViewHolder</span>&gt;</span>&#123;</span><br><span class="line">    <span class="keyword">private</span> List&lt;RecycleDataBean&gt; datas;</span><br><span class="line">    <span class="keyword">private</span> Context mContext;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">SelfeRecycleAdapter</span><span class="params">(Context context,List&lt;RecycleDataBean&gt; datas)</span></span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.datas = datas;</span><br><span class="line">        <span class="keyword">this</span>.mContext = context;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> SelfeViewHolder <span class="title">onCreateViewHolder</span><span class="params">(ViewGroup parent, <span class="keyword">int</span> viewType)</span> </span>&#123;</span><br><span class="line">        <span class="comment">//这里只返回一个View Holder，并且传递一个item view</span></span><br><span class="line">        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_recycleview_layout,parent,<span class="keyword">false</span>);</span><br><span class="line">        ViewGroup.LayoutParams lp=view.getLayoutParams();</span><br><span class="line">        <span class="comment">//这里动态指定item的宽度</span></span><br><span class="line"><span class="comment">//        lp.width= ScreenUtil.getScreenWidth(mContext);</span></span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> SelfeViewHolder(view);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onBindViewHolder</span><span class="params">(SelfeViewHolder holder, <span class="keyword">int</span> position)</span> </span>&#123;</span><br><span class="line">        RecycleDataBean data = datas.get(position);</span><br><span class="line">        holder.titleTv.setText(data.title);</span><br><span class="line">        holder.contentTv.setText(data.content);</span><br><span class="line">       <span class="comment">//使用Glide加载网络图片</span></span><br><span class="line">        Glide.with(mContext)</span><br><span class="line">                .load(data.imgUrl)</span><br><span class="line">                .asBitmap()</span><br><span class="line">                .placeholder(R.drawable.timg)</span><br><span class="line">                .into(holder.imageView);</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">getItemCount</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> datas.size();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">SelfeViewHolder</span> <span class="keyword">extends</span> <span class="title">RecyclerView</span>.<span class="title">ViewHolder</span></span>&#123;</span><br><span class="line">        <span class="keyword">public</span> TextView titleTv;</span><br><span class="line">        <span class="keyword">public</span> TextView contentTv;</span><br><span class="line">        <span class="keyword">public</span> ImageView imageView;</span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="title">SelfeViewHolder</span><span class="params">(View itemView)</span> </span>&#123;</span><br><span class="line">            <span class="keyword">super</span>(itemView);</span><br><span class="line">            titleTv = (TextView) itemView.findViewById(R.id.item_recycle_title);</span><br><span class="line">            contentTv= (TextView) itemView.findViewById(R.id.item_recycle_content);</span><br><span class="line">            imageView = (ImageView) itemView.findViewById(R.id.recycle_item_img);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><html>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</html>第五步，设置Adapter，显示数据,<strong>注意一下这个LinearLayoutManager的第二个参数是指布局的方向，第三个参数是布局文件是否反转，即如果设置为true，那么List里的第一个元素会在列表的底部显示，而最后一个元素会在顶部显示，同时列表会自动滚动并且显示底部数据。折衷特性最典型的应用场景就是聊天界面，聊天界面最新的消息在底部，向上滑动依次查看更早的消息</strong></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">initRecycleView</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="comment">//使用线性布局</span></span><br><span class="line">    mRecycleView.setLayoutManager(<span class="keyword">new</span> LinearLayoutManager(<span class="keyword">this</span>, LinearLayoutManager.VERTICAL, <span class="keyword">false</span>));</span><br><span class="line">    <span class="comment">//使用网格布局,第二个参数指明几列</span></span><br><span class="line">    mRecycleView.setAdapter(<span class="keyword">new</span> SelfeRecycleAdapter(<span class="keyword">this</span>, mDatas));</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><html>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</html>代码执行后效果如下：</p>
+<p><img src="http://bmob-cdn-22219.b0.upaiyun.com/2018/11/27/3c4674a34071960c80d49ba2c1537dbc.gif" alt="image"></p>
+<p><html>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</html>除了常规的垂直的列表，LinearLayoutManager还支持水平列表，水平列表如下设置即可，可以看到其实就是设置第二个参数为<strong>LinearLayoutManager.HORIZONTAL</strong>，垂直的就是<strong>LinearLayoutManager.VERTICAL</strong>：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mRecycleView.setLayoutManager(<span class="keyword">new</span> LinearLayoutManager(mContext, LinearLayoutManager.HORIZONTAL, <span class="keyword">false</span>));</span><br></pre></td></tr></table></figure>
+<p><html>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</html>水平列表效果如下：</p>
+<p><img src="http://bmob-cdn-22219.b0.upaiyun.com/2018/11/27/dae4f8b9401c11338001e4071f559546.gif" alt="image"></p>
+<h2 id="网格列表"><a href="#网格列表" class="headerlink" title="网格列表"></a>网格列表</h2><p><html>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</html>网格列表的使用很简单，就是设置GridLayoutManage，注意r即可：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">ridLayoutManager manager =<span class="keyword">new</span> GridLayoutManager(mContext, <span class="number">2</span>);</span><br><span class="line">mRecycleView.setLayoutManager(manager);</span><br></pre></td></tr></table></figure>
+<p><html>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</html>网格布局的效果如下吐所示：</p>
+<p><img src="http://bmob-cdn-22219.b0.upaiyun.com/2018/11/27/fefdb90f40e7e03f80921dbe56bbd2ae.gif" alt="image"></p>
+<h2 id="瀑布流列表"><a href="#瀑布流列表" class="headerlink" title="瀑布流列表"></a>瀑布流列表</h2><p><html>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</html>是通过设置StaggeredGridLayoutManager来实现的，他的第一个参数指定几列(如果是垂直布局的话)，如果是水平布局就是指定几行。第二个参数就是指定是水平显示还是垂直显示。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">StaggeredGridLayoutManager stageManager=<span class="keyword">new</span> StaggeredGridLayoutManager(<span class="number">2</span>, StaggeredGridLayoutManager.VERTICAL);</span><br><span class="line">mRecycleView.setLayoutManager(stageManager);</span><br></pre></td></tr></table></figure>
+<p><html>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</html>瀑布流的效果图如下：</p>
+<p><img src="http://bmob-cdn-22219.b0.upaiyun.com/2018/11/27/4a95ce3340fa5ec080de646554e3a080.gif" alt="image"></p>
+<p><html>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</html>可以看到瀑布流的效果跟网格的效果差不多，但是瀑布流的效果是每个item的高度是可以不一样的。而网格布局的每一个item的高度都是一样的，我们可以从效果图看出他们的区别来。</p>
+<h2 id="添加点击事件"><a href="#添加点击事件" class="headerlink" title="添加点击事件"></a>添加点击事件</h2><p><html>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</html>由于RecycleView没有自带onItemClickListener事件，所以我们需要自己在Adapter里定义单击、长按事件。基本思路就是利用itemView的onClick事件来触发我们自己定义的回调接口。</p>
+<p><html>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</html>第一步在Adapter里定义接口：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">private</span> OnItemClickListener mItemClickListener;</span><br><span class="line"><span class="comment">//设置单机事件回调</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setOnItemClickListener</span><span class="params">(OnItemClickListener listener)</span></span>&#123;</span><br><span class="line">    mItemClickListener = listener;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//单机事件回调接口</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">OnItemClickListener</span></span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onItemClick</span><span class="params">(RecyclerView recyclerView,<span class="keyword">int</span> positoin,RecycleDataBean data)</span></span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><html>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</html>第二步，给itemView设置单机事件，为了方便我们直接让adapter实现OnClickListener接口：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">SelfeRecycleAdapter</span> <span class="keyword">extends</span> <span class="title">RecyclerView</span>.<span class="title">Adapter</span>&lt;<span class="title">SelfeRecycleAdapter</span>.<span class="title">SelfeViewHolder</span>&gt; <span class="keyword">implements</span> <span class="title">View</span>.<span class="title">OnClickListener</span></span>&#123;</span><br><span class="line"></span><br><span class="line">   ....</span><br><span class="line">   </span><br><span class="line">   </span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> SelfeViewHolder <span class="title">onCreateViewHolder</span><span class="params">(ViewGroup parent, <span class="keyword">int</span> viewType)</span> </span>&#123;</span><br><span class="line">        <span class="comment">//这里只返回一个View Holder，并且传递一个item view</span></span><br><span class="line">        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_recycleview_layout,parent,<span class="keyword">false</span>);</span><br><span class="line">        <span class="comment">//在这里为item设置单机事件</span></span><br><span class="line">        view.setOnClickListener(<span class="keyword">this</span>);</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> SelfeViewHolder(view);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    ....</span><br><span class="line">    </span><br><span class="line">   <span class="keyword">private</span> RecyclerView mRecyclerView;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onAttachedToRecyclerView</span><span class="params">(RecyclerView recyclerView)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">super</span>.onAttachedToRecyclerView(recyclerView);</span><br><span class="line">        mRecyclerView=recyclerView;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onDetachedFromRecyclerView</span><span class="params">(RecyclerView recyclerView)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">super</span>.onDetachedFromRecyclerView(recyclerView);</span><br><span class="line">        mRecyclerView=<span class="keyword">null</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    </span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onClick</span><span class="params">(View v)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span>(mRecyclerView!=<span class="keyword">null</span>&amp;&amp;mItemClickListener!=<span class="keyword">null</span>)&#123;</span><br><span class="line">            <span class="comment">//这个方法根据itemView返回位置</span></span><br><span class="line">            <span class="keyword">int</span> position=mRecyclerView.getChildAdapterPosition(v);</span><br><span class="line">            mItemClickListener.onItemClick(mRecyclerView,position,datas.get(position));</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><html>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</html>如上我们已经完成了一个单击事件的处理了，以上代码中，当Adapter和RecyclerView关联上后就会回调onAttachedToRecyclerView()方法，所以在这里我们就保存一个RecyclerView实例，当adapter和RecyclerView脱离的时候就会回调onDetachedFromRecyclerView()方法，在这里我们将保存的RecyclerView设置为空，主要是为了处理好RecyclerView和Adapter的状态关系。</p>
+<p><html>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</html>其次在onClick()方法里我们通过RecyclerView的getChildAdapterPosition()方法来获取指定itemView的位置，从而获取到position，也就可以获取到当前itemView对应的实体类了。</p>
+<p><html>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</html>长按的思路也是一样，这里就不说了。</p>
+<h2 id="添加和删除数据"><a href="#添加和删除数据" class="headerlink" title="添加和删除数据"></a>添加和删除数据</h2><p><html>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</html>通常我们需要对适配器的数据进行增加、删除等操作，我们就在Adapter里去写这些方法，如下是相关的方法：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">  <span class="comment">//删除一个item</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">remove</span><span class="params">(<span class="keyword">int</span> position)</span></span>&#123;</span><br><span class="line">    datas.remove(position);</span><br><span class="line">    notifyItemRemoved(position);</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">true</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//添加一个数据</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">add</span><span class="params">(RecycleDataBean data)</span></span>&#123;</span><br><span class="line">    datas.add(<span class="number">0</span>,data);</span><br><span class="line">    notifyItemInserted(<span class="number">0</span>);</span><br><span class="line">    notifyDataSetChanged();</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">true</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//更新指定位置的元素</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">update</span><span class="params">(<span class="keyword">int</span> positoin)</span></span>&#123;</span><br><span class="line">    RecycleDataBean data = datas.get(positoin);</span><br><span class="line">    data.title=<span class="string">"我发生改变了"</span>;</span><br><span class="line">    data.content=<span class="string">"就连内容都发生变化了，不知道界面有没有被刷新呢？"</span>;</span><br><span class="line">    data.imgUrl=<span class="string">"http://bmob-cdn-22219.b0.upaiyun.com/2018/11/05/5c0e4b7f405009d880b28c3e1e71b377.jpg"</span>;</span><br><span class="line">    notifyItemChanged(positoin);</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">true</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><html>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</html><strong>注意，adapter的数据有变化，就调用相关的notify方法，notifyItemInserted()，有元素被删除就调用notifyItemRemoved()， 不要直接调用notifyDataSetChanged()，因为他会导致整个adapter重新布局，性能不好，此外，我们调用相关的方法会有一个动画效果，而直接调用notifyDataSetChanged()是没有动画效果的，如下是效果图：</strong></p>
+<p><img src="http://bmob-cdn-22219.b0.upaiyun.com/2018/11/27/68013f9440a2db1980469c06cca9db57.gif" alt="image"></p>
+<h2 id="多类型布局文件"><a href="#多类型布局文件" class="headerlink" title="多类型布局文件"></a>多类型布局文件</h2><p><html>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</html>多类型布局文件是很常见的，比如一个列表很多分类，每个分类下的数据列表又显示得不一样，这时候我们就需要这种多类型布局了。</p>
+<p><html>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</html>首先我们来构造数据类型，最简单的，我们根据RecycleDataBean的type来区分布局类型，当type=1的时候我们就显示标题，当type=-1的时候我们就显示正常列表，如下是构造数据：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//初始化一些数据</span></span><br><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">initData</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="comment">//构造一个分类</span></span><br><span class="line">    mDatas.add(<span class="keyword">new</span> RecycleDataBean(<span class="number">1</span>, <span class="string">"热门新闻"</span>, <span class="string">"没有问题的"</span>, <span class="string">"http://bmob-cdn-22219.b0.upaiyun.com/2018/11/05/5c0e4b7f405009d880b28c3e1e71b377.jpg"</span>));</span><br><span class="line">    </span><br><span class="line">    mDatas.add(<span class="keyword">new</span> RecycleDataBean(-<span class="number">1</span>, <span class="string">"这是第一个标题"</span>, <span class="string">"没有问题的"</span>, <span class="string">"http://bmob-cdn-22219.b0.upaiyun.com/2018/11/05/5c0e4b7f405009d880b28c3e1e71b377.jpg"</span>));</span><br><span class="line">    mDatas.add(<span class="keyword">new</span> RecycleDataBean(-<span class="number">1</span>, <span class="string">"这是第二个标题"</span>, <span class="string">"国家主席习近平今日已经抵达乌班图开始访问"</span>, <span class="string">"http://bmob-cdn-22219.b0.upaiyun.com/2018/11/05/99cde58e40faad81806513e34517d521.jpg"</span>));</span><br><span class="line">    mDatas.add(<span class="keyword">new</span> RecycleDataBean(-<span class="number">1</span>, <span class="string">"这是第三个标题"</span>, <span class="string">"受台湾海峡地震影响，G3001次（福州至香港西九龙）、G3003次（厦门至香港西九龙）列车不同程度晚点。铁路部门提醒，旅客朋友可关注站车广播公告，或致电12306客服热线查询，"</span>, <span class="string">"http://bmob-cdn-22219.b0.upaiyun.com/2018/11/05/6c8f212d404d69c38048e8edb55783b4.jpg"</span>));</span><br><span class="line">    mDatas.add(<span class="keyword">new</span> RecycleDataBean(-<span class="number">1</span>, <span class="string">"这是第四个标题"</span>, <span class="string">"测试一下数据是不是正常的，如果不正常就要替换掉了"</span>, <span class="string">"http://bmob-cdn-22219.b0.upaiyun.com/2018/11/05/5a131e9a40fa729d8073a1c32aad9a7a.jpg"</span>));</span><br><span class="line">    mDatas.add(<span class="keyword">new</span> RecycleDataBean(-<span class="number">1</span>, <span class="string">"这是第八个标题"</span>, <span class="string">"准备好了吧"</span>, <span class="string">"http://bmob-cdn-22219.b0.upaiyun.com/2018/11/05/5c0e4b7f405009d880b28c3e1e71b377.jpg"</span>));</span><br><span class="line">    <span class="comment">//构造第二个分类</span></span><br><span class="line">    mDatas.add(<span class="keyword">new</span> RecycleDataBean(<span class="number">1</span>, <span class="string">"本周推荐"</span>, <span class="string">"没有问题的"</span>, <span class="string">"http://bmob-cdn-22219.b0.upaiyun.com/2018/11/05/5c0e4b7f405009d880b28c3e1e71b377.jpg"</span>));</span><br><span class="line">    mDatas.add(<span class="keyword">new</span> RecycleDataBean(-<span class="number">1</span>, <span class="string">"这是第五个标题"</span>, <span class="string">"6786666"</span>, <span class="string">"http://bmob-cdn-22219.b0.upaiyun.com/2018/11/05/d2ffa47d406ce16d800d624e34bd10f6.jpg"</span>));</span><br><span class="line">    mDatas.add(<span class="keyword">new</span> RecycleDataBean(-<span class="number">1</span>, <span class="string">"这是第六个标题"</span>, <span class="string">"这是第六条内容"</span>, <span class="string">"http://bmob-cdn-22219.b0.upaiyun.com/2018/11/05/2218a148407300c180305436e75edf6c.jpg"</span>));</span><br><span class="line">    mDatas.add(<span class="keyword">new</span> RecycleDataBean(-<span class="number">1</span>, <span class="string">"这是第七个标题"</span>, <span class="string">"还没有开始"</span>, <span class="string">"http://bmob-cdn-22219.b0.upaiyun.com/2018/11/05/f1cbe50440d8b161800a5c5a3fee303b.jpg"</span>));</span><br><span class="line">    mDatas.add(<span class="keyword">new</span> RecycleDataBean(-<span class="number">1</span>, <span class="string">"这是第八个标题"</span>, <span class="string">"准备好了吧"</span>, <span class="string">"http://bmob-cdn-22219.b0.upaiyun.com/2018/11/05/5c0e4b7f405009d880b28c3e1e71b377.jpg"</span>));</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><html>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</html>如上所示，我们加了两个标题，一个是“热门新闻”，一个是“本周推荐”。</p>
+<p><html>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</html>第二步准备两个ViewHolder，用于实现不标题和列表的显示：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="comment">//列表ViewHolder</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">SelfeViewHolder</span> <span class="keyword">extends</span> <span class="title">RecyclerView</span>.<span class="title">ViewHolder</span></span>&#123;</span><br><span class="line">    <span class="keyword">public</span> TextView titleTv;</span><br><span class="line">    <span class="keyword">public</span> TextView contentTv;</span><br><span class="line">    <span class="keyword">public</span> ImageView imageView;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">SelfeViewHolder</span><span class="params">(View itemView)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">super</span>(itemView);</span><br><span class="line">        titleTv = (TextView) itemView.findViewById(R.id.item_recycle_title);</span><br><span class="line">        contentTv= (TextView) itemView.findViewById(R.id.item_recycle_content);</span><br><span class="line">        imageView = (ImageView) itemView.findViewById(R.id.recycle_item_img);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//标题ViewHolder</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">SelfeViewTitleHolder</span> <span class="keyword">extends</span> <span class="title">RecyclerView</span>.<span class="title">ViewHolder</span></span>&#123;</span><br><span class="line">    <span class="keyword">public</span> TextView titleTv;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">SelfeViewTitleHolder</span><span class="params">(View itemView)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">super</span>(itemView);</span><br><span class="line">        titleTv = (TextView) itemView.findViewById(R.id.item_title_rv);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><html>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</html>第三步，重写getItemViewType()方法，告诉adapter什么时候用什么布局：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Override</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">getItemViewType</span><span class="params">(<span class="keyword">int</span> position)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> datas.get(position).type;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><html>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</html><br>第四步，重写onCreateViewHolder()创建两个ViewHolder和onBindViewHolder()为ViewHolder里组建赋值：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="meta">@Override</span></span><br><span class="line"><span class="keyword">public</span> RecyclerView.<span class="function">ViewHolder <span class="title">onCreateViewHolder</span><span class="params">(ViewGroup parent, <span class="keyword">int</span> viewType)</span> </span>&#123;</span><br><span class="line">    <span class="comment">//这里只返回一个View Holder，并且传递一个item view</span></span><br><span class="line">    View view =<span class="keyword">null</span>;</span><br><span class="line">    <span class="keyword">if</span>(viewType==-<span class="number">1</span>) &#123;  <span class="comment">//构造普通列表itemView</span></span><br><span class="line">        view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_recycleview_layout, parent, <span class="keyword">false</span>);</span><br><span class="line">    &#125;<span class="keyword">else</span> <span class="keyword">if</span>(viewType==<span class="number">1</span>)&#123; <span class="comment">//构造标题itemView</span></span><br><span class="line">        view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_title_recycleview, parent, <span class="keyword">false</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span>(viewType==-<span class="number">1</span>)&#123;  <span class="comment">//使用列表item的ViewHolder</span></span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> SelfeViewHolder(view);</span><br><span class="line">    &#125;<span class="keyword">else</span> <span class="keyword">if</span>(viewType==<span class="number">1</span>)&#123;  <span class="comment">//使用标题的ViewHolder</span></span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> SelfeViewTitleHolder(view);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="meta">@Override</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onBindViewHolder</span><span class="params">(RecyclerView.ViewHolder viewHolder, <span class="keyword">int</span> position)</span> </span>&#123;</span><br><span class="line">    RecycleDataBean data = datas.get(position);</span><br><span class="line">    <span class="keyword">if</span>(getItemViewType(position)==-<span class="number">1</span>)&#123;  <span class="comment">//设置显示普通列表树</span></span><br><span class="line">        SelfeViewHolder   holder = (SelfeViewHolder)viewHolder;</span><br><span class="line">        holder.titleTv.setText(data.title);</span><br><span class="line">        holder.contentTv.setText(data.content);</span><br><span class="line">        Glide.with(mContext)</span><br><span class="line">                .load(data.imgUrl)</span><br><span class="line">                .asBitmap()</span><br><span class="line">                .placeholder(R.drawable.timg)</span><br><span class="line">                .into(holder.imageView);</span><br><span class="line">    &#125;<span class="keyword">else</span>&#123;  <span class="comment">//这里设置标题数据</span></span><br><span class="line">        SelfeViewTitleHolder holder = (SelfeViewTitleHolder) viewHolder;</span><br><span class="line">        holder.titleTv.setText(data.title);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">//这里是适配瀑布流的多级布局</span></span><br><span class="line">    <span class="keyword">if</span>(viewHolder.itemView.getLayoutParams() <span class="keyword">instanceof</span> StaggeredGridLayoutManager.LayoutParams )&#123;</span><br><span class="line">        StaggeredGridLayoutManager.LayoutParams layoutParams = (StaggeredGridLayoutManager.LayoutParams) viewHolder.itemView.getLayoutParams();</span><br><span class="line">        <span class="keyword">if</span>(getItemViewType(position)==<span class="number">1</span>)&#123;</span><br><span class="line">            layoutParams.setFullSpan(<span class="keyword">true</span>);</span><br><span class="line">        &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">            layoutParams.setFullSpan(<span class="keyword">false</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line">   <span class="meta">@Override</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">getItemViewType</span><span class="params">(<span class="keyword">int</span> position)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> datas.get(position).type;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><html>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</html>注意了，如果是普通的LinearLayoutManager可以直接实现，如果是网格布局和瀑布流布局就需要分别处理以下标题的显示，因为网格布局可能存在多列，所以标题无法直接填满一整行，对于网格布局使用下面的方法进行适配：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">GridLayoutManager manager =<span class="keyword">new</span> GridLayoutManager(mContext, <span class="number">2</span>);</span><br><span class="line">mRecycleView.setLayoutManager(manager);</span><br><span class="line">mRecycleView.addItemDecoration(<span class="keyword">new</span> GridSpacingItemDecoration(<span class="number">2</span>, <span class="number">5</span>, <span class="keyword">true</span>));</span><br><span class="line"><span class="comment">//这里需要解决</span></span><br><span class="line"> manager.setSpanSizeLookup(<span class="keyword">new</span> GridLayoutManager.SpanSizeLookup() &#123;</span><br><span class="line">        <span class="meta">@Override</span></span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">getSpanSize</span><span class="params">(<span class="keyword">int</span> position)</span> </span>&#123;</span><br><span class="line">          <span class="comment">//当是标题时就让他显示一列，如果是child就让他显示两列</span></span><br><span class="line">          <span class="keyword">return</span> mRecycleView.getAdapter().getItemViewType(position) == <span class="number">1</span> ? manager.getSpanCount() : <span class="number">1</span>;</span><br><span class="line">                  &#125;</span><br><span class="line">        &#125;);</span><br></pre></td></tr></table></figure>
+<p><html>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</html>对于 GridLayoutManager，他有一个setSpanSizeLookup()方法可以设置一个回调接口，用于告诉adapter，这个item需要占据几个item的宽度，如果是1就占满屏的宽度。</p>
+<p><html>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</html>而对于StaggeredGridLayoutManager，他是没有setSpanSizeLookup()用于回调的，但是他的LayoutParams有个setFullSpan()方法，用于告诉adapter当前这个item是否需要占满一行，所以我们在onBindViewHolder()方法里就做出如下适配瀑布流的多布局文件：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Override</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onBindViewHolder</span><span class="params">(RecyclerView.ViewHolder viewHolder, <span class="keyword">int</span> position)</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">  </span><br><span class="line">   ...</span><br><span class="line">   </span><br><span class="line">    <span class="comment">//这里是适配瀑布流的多级布局</span></span><br><span class="line">    <span class="keyword">if</span>(viewHolder.itemView.getLayoutParams() <span class="keyword">instanceof</span> StaggeredGridLayoutManager.LayoutParams )&#123;</span><br><span class="line">        StaggeredGridLayoutManager.LayoutParams layoutParams = (StaggeredGridLayoutManager.LayoutParams) viewHolder.itemView.getLayoutParams();</span><br><span class="line">        <span class="comment">//如果是标题就设置为占满一整行。</span></span><br><span class="line">        <span class="keyword">if</span>(getItemViewType(position)==<span class="number">1</span>)&#123;</span><br><span class="line">            layoutParams.setFullSpan(<span class="keyword">true</span>);</span><br><span class="line">        &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">            layoutParams.setFullSpan(<span class="keyword">false</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><html>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</html>如下是多布局文件的效果：</p>
+<p><img src="http://bmob-cdn-22219.b0.upaiyun.com/2018/11/27/90cc103e403be96c807ac0b862ee757b.gif" alt="image"></p>
+<hr>
+<h1 id="进阶"><a href="#进阶" class="headerlink" title="进阶"></a>进阶</h1><h2 id="动画的使用"><a href="#动画的使用" class="headerlink" title="动画的使用"></a>动画的使用</h2><p><html>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</html>在前面介绍基础使用的时候我们在删除和添加元素的时候Adapter的item会有一个小小的动画，就是后面的布局会整体慢慢移动补上被删除的元素，这个动画其实就是由RecyclerView提供的默认的DefaultItemAnimator动画，如果我们想要让动画时间延长可以这样操作：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//设置动画</span></span><br><span class="line">DefaultItemAnimator animator = <span class="keyword">new</span> DefaultItemAnimator();</span><br><span class="line"><span class="comment">//将删除动画的时间设为1.5秒</span></span><br><span class="line">animator.setRemoveDuration(<span class="number">1500</span>);</span><br><span class="line">mRecycleView.setItemAnimator(animator);</span><br><span class="line"><span class="comment">//直接设置Adapter</span></span><br><span class="line">mRecycleView.setAdapter(mAdapter);</span><br></pre></td></tr></table></figure>
+<p><html>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</html><br>修改过后的效果图如下：</p>
+<p><img src="http://bmob-cdn-22219.b0.upaiyun.com/2018/11/27/329b6d5b40ce112780b1f6e4c466c4d1.gif" alt="image"></p>
+<h2 id="自定义动画"><a href="#自定义动画" class="headerlink" title="自定义动画"></a>自定义动画</h2><p><html>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</html>上面是RecyclerView自带的动画，他只有这么一个动画，接下来我们实现一下自己想要的动画，主要是继承SimpleItemAnimator类，其实要处理好整个动画还是有点复杂的，因为item的动画还涉及到整个列表的状态，比如删除一个item，其他item也会做出相应改变。我们可以直接把DefaultItemAnimator里的代码全都复制到自己定义的动画，然后修改相关的方法即可，具体ide动画逻辑都是在animate..Impl()方法里修改。代码有点长，我们就贴出我改动的动画效果吧：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">animateRemoveImpl</span><span class="params">(<span class="keyword">final</span> RecyclerView.ViewHolder holder)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">final</span> View view = holder.itemView;</span><br><span class="line">    <span class="keyword">final</span> ViewPropertyAnimatorCompat animation = ViewCompat.animate(view);</span><br><span class="line">    mRemoveAnimations.add(holder);</span><br><span class="line">    animation.setDuration(getRemoveDuration())</span><br><span class="line">            .translationX(-view.getWidth())  <span class="comment">//让item从左滑出</span></span><br><span class="line">            .setListener(<span class="keyword">new</span> VpaListenerAdapter() &#123;</span><br><span class="line">        <span class="meta">@Override</span></span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onAnimationStart</span><span class="params">(View view)</span> </span>&#123;</span><br><span class="line">            dispatchRemoveStarting(holder);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="meta">@Override</span></span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onAnimationEnd</span><span class="params">(View view)</span> </span>&#123;</span><br><span class="line">            animation.setListener(<span class="keyword">null</span>);</span><br><span class="line">            <span class="comment">//动画结束后需要把view的位置改回来</span></span><br><span class="line">            ViewCompat.setTranslationX(view,view.getWidth());</span><br><span class="line">            dispatchRemoveFinished(holder);</span><br><span class="line">            mRemoveAnimations.remove(holder);</span><br><span class="line">            dispatchFinishedWhenDone();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;).start();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><html>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</html>以下是我们修改后实现的删除动画：</p>
+<p><img src="http://bmob-cdn-22219.b0.upaiyun.com/2018/11/27/997454c4404c6acf803da4745f5d5306.gif" alt="image"></p>
+<h2 id="使用LayoutAnimation动画"><a href="#使用LayoutAnimation动画" class="headerlink" title="使用LayoutAnimation动画"></a>使用LayoutAnimation动画</h2><p><html>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</html>这个动画其实是Android系统提供的一个很基础的动画，他可以作用在任何ViewGroup上，是对ViewGroup的子View进行的动画，这里我们用在RecyclerView上是实现itemView的动画，如下是一个典型的LayoutAnimation动画：<br><img src="http://bmob-cdn-22219.b0.upaiyun.com/2018/11/27/35fcb0db40b6a0fd80704e9a1687cc2f.gif" alt="image"></p>
+<h1 id="RecyclerView中实用的方法"><a href="#RecyclerView中实用的方法" class="headerlink" title="RecyclerView中实用的方法"></a>RecyclerView中实用的方法</h1><p><html>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</html>在RecyclerView中(包括布局管理器)有很多实用的方法，我们在实现想要的效果的时候都离不开这些方法，在这里我列出很实用的一些方法。</p>
+<h2 id="RecyclerView"><a href="#RecyclerView" class="headerlink" title="RecyclerView"></a>RecyclerView</h2><ol>
+<li><strong>addItemDecoration(ItemDecoration dec):</strong>此方法是设置item之间的分割线，我们要实现分割线就需要继承RecyclerView.ItemDecoration类，是个抽象类，我们需要实现方法。<br>2.<strong> addOnChildAttachStateChangeListener()</strong>：设置一个监听，每当某个item要出现在屏幕上显示的时候他就会被回调，并且回调方法里会传给itemView，我们利用此方法可以实现item出现的动画。如下使用，给每个iterm进入屏幕后加个动画：</li>
+</ol>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">mRecycleView.addOnChildAttachStateChangeListener(<span class="keyword">new</span> RecyclerView.OnChildAttachStateChangeListener() &#123;</span><br><span class="line">           <span class="meta">@Override</span></span><br><span class="line">           <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onChildViewAttachedToWindow</span><span class="params">(View view)</span> </span>&#123;</span><br><span class="line">           <span class="comment">//属性动画，旋转动画</span></span><br><span class="line">               <span class="keyword">float</span> angle=<span class="number">30f</span>;</span><br><span class="line">                   ObjectAnimator ra = ObjectAnimator.ofFloat(view,<span class="string">"rotation"</span>, <span class="number">0f</span>, angle,angle,<span class="number">0f</span>,-angle,<span class="number">0f</span>);</span><br><span class="line">                   ra.setDuration(<span class="number">800</span>);</span><br><span class="line">                   ra.start();</span><br><span class="line">           &#125;</span><br><span class="line"></span><br><span class="line">           <span class="meta">@Override</span></span><br><span class="line">           <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onChildViewDetachedFromWindow</span><span class="params">(View view)</span> </span>&#123;</span><br><span class="line">               TextView tv = (TextView) view.findViewById(R.id.item_recycle_title);</span><br><span class="line">               <span class="keyword">if</span>(tv!=<span class="keyword">null</span>)</span><br><span class="line">                   Log.e(<span class="string">"asxas"</span>,<span class="string">"itemView失去了："</span>+tv.getText().toString());</span><br><span class="line">           &#125;</span><br><span class="line">       &#125;);</span><br></pre></td></tr></table></figure>
+<p>当然了，这个动画要想作用于每个item，还需要进制ViewHolder的复用，要想禁止复用，直接在Adapter的onBindViewHolder()方法里调用holder.setIsRecyclable(false);即可，以下给每个item加入进入屏幕动画效果：</p>
+<p><img src="http://bmob-cdn-22219.b0.upaiyun.com/2018/11/28/845cde6640c0528c80f462bb1f7938a3.gif" alt="image"></p>
+<p>3.<strong>addOnItemTouchListener()：</strong>这个方法是RecyclerView的item触摸监听，他提供的方法里有触摸事件，我们通过触摸事件和RecyclerView的findChildViewUnder()方法也可以实现单击事件哦。<strong>需要注意的是，如果我们重写的onInterceptTouchEvent()方法返回了true，那么在Adapter里ViewHolder的所有view都将不会获取到点击和触摸事件，也就是它会被拦截，被onTouchEvent（）消费掉，即，如果onInterceptTouchEvent()返回false，则onTouchEvent()不执行，如果返回true则onTouchEvent()执行</strong></p>
+<p>4.<strong>addOnScrollListener()</strong>：这个方法不用过多介绍，经常使用，就是监听RecyclerView的滚动的。在RecyclerView中滚动有三种状态，第一就是<strong>RecyclerView.SCROLL_STATE_DRAGGING</strong>这种状态是手指依然在屏幕上拖动着RecyclerView滚动，第二种是<strong>RecyclerView.SCROLL_STATE_SETTLING</strong>手指离开了屏幕RecyclerView在自己滚动，第三种是<strong>RecyclerView.SCROLL_STATE_IDLE</strong>，这种状态下，标志着RecyclerView滚动结束。</p>
+<p>5.<strong>findChildViewUnder()：</strong>这个方法也比较常用，他会根据给定的屏幕坐标返回一个view，这个view是RecyclerView的itemView。</p>
+<p>6.<strong>findViewHolderForAdapterPosition(int position)</strong>：这个方法是根据给定的positoin值返回该位置的ViewHolder。</p>
+<p>7.<strong>getChildAdapterPosition(View v)：</strong>根据给定的itemView返回这个itemView在Adapter里的位置.</p>
+<p>8.<strong>getChildViewHolder(view v)：</strong>根据给定的itemView返回他的viewHolder。</p>
+<p>9.<strong>smoothScrollToPosition(int posotion)：</strong>平滑滚动到指定位置。</p>
+<h2 id="LinearLayoutManager"><a href="#LinearLayoutManager" class="headerlink" title="LinearLayoutManager"></a>LinearLayoutManager</h2><ol>
+<li>findFirstVisibleItemPosition()：获取当前屏幕内第一个可以看到的itemView，此方法非常实用。</li>
+<li>findFirstCompletelyVisibleItemPosition()：获取当前屏幕内第一个完整显示出来的itemView，上面的方法是不管itemView是否完成都会返回。</li>
+<li>findLastVisibleItemPosition()：获取当前可见屏幕内最后一个可见的itemView。</li>
+<li>scrollToPositionWithOffset(int position,int offset)：让RecyclewView缓慢滑动到指定位置，并且可以指定偏移量。</li>
+</ol>
+<h2 id="GridLayoutManager"><a href="#GridLayoutManager" class="headerlink" title="GridLayoutManager"></a>GridLayoutManager</h2><p>由于GridLayoutManager是继承LinearLayoutManager的，也没有很多方法，但是有一个方法是非常实用的：</p>
+<ol>
+<li>setSpanSizeLookup(SpanSizeLookup lookup)：这个方法设置之后，可以控制一个item是占据一整行还是几个item共享一整行。我们进行多布局文件的时候常用这个方法。</li>
+</ol>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/11/12/查找二叉树的实现/" rel="next" title="查找二叉树(BST树)的实现">
+                <i class="fa fa-chevron-left"></i> 查找二叉树(BST树)的实现
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">泼墨成空</p>
+              <p class="site-description motion-element" itemprop="description">沉下心来好好耕耘。</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">25</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">5</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#基础使用"><span class="nav-number">1.</span> <span class="nav-text">基础使用</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#水平线性列表"><span class="nav-number">1.1.</span> <span class="nav-text">水平线性列表</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#网格列表"><span class="nav-number">1.2.</span> <span class="nav-text">网格列表</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#瀑布流列表"><span class="nav-number">1.3.</span> <span class="nav-text">瀑布流列表</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#添加点击事件"><span class="nav-number">1.4.</span> <span class="nav-text">添加点击事件</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#添加和删除数据"><span class="nav-number">1.5.</span> <span class="nav-text">添加和删除数据</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#多类型布局文件"><span class="nav-number">1.6.</span> <span class="nav-text">多类型布局文件</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#进阶"><span class="nav-number">2.</span> <span class="nav-text">进阶</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#动画的使用"><span class="nav-number">2.1.</span> <span class="nav-text">动画的使用</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#自定义动画"><span class="nav-number">2.2.</span> <span class="nav-text">自定义动画</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#使用LayoutAnimation动画"><span class="nav-number">2.3.</span> <span class="nav-text">使用LayoutAnimation动画</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#RecyclerView中实用的方法"><span class="nav-number">3.</span> <span class="nav-text">RecyclerView中实用的方法</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#RecyclerView"><span class="nav-number">3.1.</span> <span class="nav-text">RecyclerView</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#LinearLayoutManager"><span class="nav-number">3.2.</span> <span class="nav-text">LinearLayoutManager</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#GridLayoutManager"><span class="nav-number">3.3.</span> <span class="nav-text">GridLayoutManager</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">泼墨成空</span>
+
+  
+</div>
+
+
+
+
+
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+  
+
+
+
+  
+  
+
+
+
+  
+  
+
+
+
+  
+  
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/canvas-nest/canvas-nest.min.js"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/three/three.min.js"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/three/three-waves.min.js"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/three/canvas_lines.min.js"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/three/canvas_sphere.min.js"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

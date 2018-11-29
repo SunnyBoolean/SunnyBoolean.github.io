@@ -94,7 +94,7 @@
 <meta property="og:image" content="http://bmob-cdn-22219.b0.upaiyun.com/2018/11/16/6d3337ae400a18ca80baf9dbc92c67c1.png">
 <meta property="og:image" content="http://bmob-cdn-22219.b0.upaiyun.com/2018/11/16/fc87c2e3408a5d0c80bae2aab7c73679.png">
 <meta property="og:image" content="http://bmob-cdn-22219.b0.upaiyun.com/2018/11/16/4c1adc8740f05e0280b035ab4115ca7b.png">
-<meta property="og:updated_time" content="2018-11-16T06:37:50.220Z">
+<meta property="og:updated_time" content="2018-11-22T13:44:07.980Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="树的基础">
 <meta name="twitter:description" content="树简介&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;树结构是非线性的，其实就是指在该结构中至少存在一个数据元素，有两个或两个以上的直接前驱或后继元素。如下就是树结构示意图：  相关术语&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;树结构里有较多相关的术语。 结点&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;">
@@ -169,7 +169,7 @@
       </a>
     </div>
       
-        <p class="site-subtitle">菜鸟的空间</p>
+        <p class="site-subtitle">要想无心很容易，在乎才需要勇气。</p>
       
   </div>
 
@@ -390,8 +390,20 @@
 <h2 id="满二叉树"><a href="#满二叉树" class="headerlink" title="满二叉树"></a>满二叉树</h2><p><html>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</html>满二叉树是指除了最后的叶子节点外所有的结点的子树个数都是2，满二叉树的结构如下：<br><img src="http://bmob-cdn-22219.b0.upaiyun.com/2018/11/16/13379f9f40ad99c8800a31681fdec9f1.png" alt="image"></p>
 <h2 id="完全二叉树"><a href="#完全二叉树" class="headerlink" title="完全二叉树"></a>完全二叉树</h2><p><html>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</html>完全二叉树是在满二叉树的基础上做减法。加入有一棵二叉，只有当树中每个结点和他的满二叉树状态下的所有结点一一对应才能称为完全二叉树。</p>
 <p><html>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</html>根据此定义，满二叉树是完全二叉树，但是完全二叉树不一定是满二叉树。<br><img src="http://bmob-cdn-22219.b0.upaiyun.com/2018/11/16/c8b881b740366113804a102182b61575.png" alt="image"></p>
-<h2 id="查找二叉树"><a href="#查找二叉树" class="headerlink" title="查找二叉树"></a>查找二叉树</h2><p><html>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</html>查找二叉树，顾名思义，就是为了解决查找性能而诞生的，他的特性是：某个结点的左子树的元素都比自己小，而右子树的结点元素都比自己大，如下就是一个查找二叉树：<br><img src="http://bmob-cdn-22219.b0.upaiyun.com/2018/11/16/6d3337ae400a18ca80baf9dbc92c67c1.png" alt="image"></p>
+<h2 id="查找二叉树-BST树"><a href="#查找二叉树-BST树" class="headerlink" title="查找二叉树(BST树)"></a>查找二叉树(BST树)</h2><p><html>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</html>查找二叉树也叫BST树、二叉搜索树。顾名思义，就是为了解决查找性能而诞生的，他的特性是：某个结点的左子树的元素都比自己小，而右子树的结点元素都比自己大，如下就是一个查找二叉树：<br><img src="http://bmob-cdn-22219.b0.upaiyun.com/2018/11/16/6d3337ae400a18ca80baf9dbc92c67c1.png" alt="image"></p>
 <h2 id="平衡二叉树-AVL树"><a href="#平衡二叉树-AVL树" class="headerlink" title="平衡二叉树(AVL树)"></a>平衡二叉树(AVL树)</h2><p><html>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</html>平衡二叉树是在查找二叉树的基础上的完善，所以也叫平衡二叉查找树。他可以通过旋转使结点的高度差最高为1。这样自带旋转的特性，不至于让一些元素称为“链表”的形式存在。如下是AVL树和非AVL树的对比：<br><img src="http://bmob-cdn-22219.b0.upaiyun.com/2018/11/16/fc87c2e3408a5d0c80bae2aab7c73679.png" alt="image"></p>
+<h2 id="红黑树"><a href="#红黑树" class="headerlink" title="红黑树"></a>红黑树</h2><p><html>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</html>红黑树叫Red-Black Tree，即RBT。他是一种特殊的二叉查找树。红黑树的每个结点上都存储一个用来存储结点颜色的属性，要么是红要么是黑，红黑树的特性如下：</p>
+<ol>
+<li>每个结点要么是黑色，要么是白色。</li>
+<li>根结点是黑色。</li>
+<li>每个叶子结点是黑色。</li>
+<li>如果一个结点是红色的，则他的子节点必须是黑色的。</li>
+<li>从一个结点到该结点的子孙结点的所有路径上包含相同数目的黑结点。<br><html>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</html><strong>红黑树的应用非常广泛，主要用于存储有序的数据，他的时间复杂度是O(lgn)，效率非常高，java中的TreeMap就是红黑树实现的，HashMap里如果链表过长也会转成红黑树。</strong></li>
+</ol>
+<h2 id="哈夫曼树"><a href="#哈夫曼树" class="headerlink" title="哈夫曼树"></a>哈夫曼树</h2><p><html>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</html>哈夫曼树又或者叫霍夫曼树，他是最优二叉树，定义如下：</p>
+<blockquote>
+<p>给定n个权值作为n个叶子结点，构造一颗二叉树，若树的带权路径长度达到最小，则这个树称为哈夫曼树。</p>
+</blockquote>
 <hr>
 <h1 id="二叉树的遍历"><a href="#二叉树的遍历" class="headerlink" title="二叉树的遍历"></a>二叉树的遍历</h1><p><html>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</html>二叉树的遍历根据访问根结点的顺序来讲有三种方式，分别是前序遍历、中序遍历、后序遍历。</p>
 <ol>
@@ -430,8 +442,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2018/11/08/队列/" rel="next" title="队列">
-                <i class="fa fa-chevron-left"></i> 队列
+              <a href="/2018/11/08/堆栈/" rel="next" title="堆栈">
+                <i class="fa fa-chevron-left"></i> 堆栈
               </a>
             
           </div>
@@ -439,6 +451,10 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/11/08/队列/" rel="prev" title="队列">
+                队列 <i class="fa fa-chevron-right"></i>
+              </a>
             
           </div>
         </div>
@@ -505,7 +521,7 @@
           <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
             
               <p class="site-author-name" itemprop="name">泼墨成空</p>
-              <p class="site-description motion-element" itemprop="description">只是一个菜鸟</p>
+              <p class="site-description motion-element" itemprop="description">沉下心来好好耕耘。</p>
           </div>
 
           <nav class="site-state motion-element">
@@ -515,7 +531,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">21</span>
+                  <span class="site-state-item-count">25</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -526,7 +542,7 @@
               
               <div class="site-state-item site-state-categories">
                 <a href="/categories/index.html">
-                  <span class="site-state-item-count">4</span>
+                  <span class="site-state-item-count">5</span>
                   <span class="site-state-item-name">分类</span>
                 </a>
               </div>
@@ -561,7 +577,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#树简介"><span class="nav-number">1.</span> <span class="nav-text">树简介</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#相关术语"><span class="nav-number">2.</span> <span class="nav-text">相关术语</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#结点"><span class="nav-number">2.1.</span> <span class="nav-text">结点</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#结点的度"><span class="nav-number">2.2.</span> <span class="nav-text">结点的度</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#叶结点"><span class="nav-number">2.3.</span> <span class="nav-text">叶结点</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#分支结点"><span class="nav-number">2.4.</span> <span class="nav-text">分支结点</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#树的度"><span class="nav-number">2.5.</span> <span class="nav-text">树的度</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#树的高度-深度"><span class="nav-number">2.6.</span> <span class="nav-text">树的高度(深度)</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#树的分类"><span class="nav-number">3.</span> <span class="nav-text">树的分类</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#二叉树"><span class="nav-number">3.1.</span> <span class="nav-text">二叉树</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#二叉树的性质"><span class="nav-number">3.2.</span> <span class="nav-text">二叉树的性质</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#满二叉树"><span class="nav-number">3.3.</span> <span class="nav-text">满二叉树</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#完全二叉树"><span class="nav-number">3.4.</span> <span class="nav-text">完全二叉树</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#查找二叉树"><span class="nav-number">3.5.</span> <span class="nav-text">查找二叉树</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#平衡二叉树-AVL树"><span class="nav-number">3.6.</span> <span class="nav-text">平衡二叉树(AVL树)</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#二叉树的遍历"><span class="nav-number">4.</span> <span class="nav-text">二叉树的遍历</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#树简介"><span class="nav-number">1.</span> <span class="nav-text">树简介</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#相关术语"><span class="nav-number">2.</span> <span class="nav-text">相关术语</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#结点"><span class="nav-number">2.1.</span> <span class="nav-text">结点</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#结点的度"><span class="nav-number">2.2.</span> <span class="nav-text">结点的度</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#叶结点"><span class="nav-number">2.3.</span> <span class="nav-text">叶结点</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#分支结点"><span class="nav-number">2.4.</span> <span class="nav-text">分支结点</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#树的度"><span class="nav-number">2.5.</span> <span class="nav-text">树的度</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#树的高度-深度"><span class="nav-number">2.6.</span> <span class="nav-text">树的高度(深度)</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#树的分类"><span class="nav-number">3.</span> <span class="nav-text">树的分类</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#二叉树"><span class="nav-number">3.1.</span> <span class="nav-text">二叉树</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#二叉树的性质"><span class="nav-number">3.2.</span> <span class="nav-text">二叉树的性质</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#满二叉树"><span class="nav-number">3.3.</span> <span class="nav-text">满二叉树</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#完全二叉树"><span class="nav-number">3.4.</span> <span class="nav-text">完全二叉树</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#查找二叉树-BST树"><span class="nav-number">3.5.</span> <span class="nav-text">查找二叉树(BST树)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#平衡二叉树-AVL树"><span class="nav-number">3.6.</span> <span class="nav-text">平衡二叉树(AVL树)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#红黑树"><span class="nav-number">3.7.</span> <span class="nav-text">红黑树</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#哈夫曼树"><span class="nav-number">3.8.</span> <span class="nav-text">哈夫曼树</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#二叉树的遍历"><span class="nav-number">4.</span> <span class="nav-text">二叉树的遍历</span></a></li></ol></div>
             
 
           </div>

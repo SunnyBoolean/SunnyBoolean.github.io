@@ -1823,7 +1823,7 @@ pre .javascript .function {
   width: 4px;
   height: 4px;
   border-radius: 50%;
-  background: #54ffff;
+  background: #8eff6c;
 }
 .links-of-blogroll {
   font-size: 13px;
@@ -2990,4 +2990,10 @@ pre .javascript .function {
   .post-body {
     text-align: justify;
   }
+}
+body {
+  background: url("http://bmob-cdn-22219.b0.upaiyun.com/2018/11/05/d2ffa47d406ce16d800d624e34bd10f6.jpg");
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  background-position: 60% 60%;
 }
