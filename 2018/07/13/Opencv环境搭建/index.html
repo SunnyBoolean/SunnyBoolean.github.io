@@ -1,0 +1,781 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Hexo, NexT">
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;本系列开始学习Opencv。因为之前业务需要研究过Opencv，但是苦于网上的Opencv Android相关知识比较少，且很零碎，所以我觉得有必要对Opencv Fro Android进行一个学习总结并形成博文。 OpenCv的三种使用方式&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Opencv环境搭建">
+<meta property="og:url" content="http://yoursite.com/2018/07/13/Opencv环境搭建/index.html">
+<meta property="og:site_name" content="泼墨成空">
+<meta property="og:description" content="&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;本系列开始学习Opencv。因为之前业务需要研究过Opencv，但是苦于网上的Opencv Android相关知识比较少，且很零碎，所以我觉得有必要对Opencv Fro Android进行一个学习总结并形成博文。 OpenCv的三种使用方式&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2019-01-12T14:45:09.444Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Opencv环境搭建">
+<meta name="twitter:description" content="&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;本系列开始学习Opencv。因为之前业务需要研究过Opencv，但是苦于网上的Opencv Android相关知识比较少，且很零碎，所以我觉得有必要对Opencv Fro Android进行一个学习总结并形成博文。 OpenCv的三种使用方式&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2018/07/13/Opencv环境搭建/">
+
+
+
+
+
+  <title>Opencv环境搭建 | 泼墨成空</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope="" itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">泼墨成空</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">要想无心很容易，在乎才需要勇气。</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br>
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-schedule">
+          <a href="/schedule/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-calendar"></i> <br>
+            
+            学习计划
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/07/13/Opencv环境搭建/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="泼墨成空">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="泼墨成空">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Opencv环境搭建</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-07-13T18:41:09+08:00">
+                2018-07-13
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
+                  <a href="/categories/OpenCv-Android之旅/" itemprop="url" rel="index">
+                    <span itemprop="name">OpenCv Android之旅</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p><html>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</html>本系列开始学习Opencv。因为之前业务需要研究过Opencv，但是苦于网上的Opencv Android相关知识比较少，且很零碎，所以我觉得有必要对Opencv Fro Android进行一个学习总结并形成博文。</p>
+<h1 id="OpenCv的三种使用方式"><a href="#OpenCv的三种使用方式" class="headerlink" title="OpenCv的三种使用方式"></a>OpenCv的三种使用方式</h1><p><html>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</html>对于Opencv的介绍我就不多说了，其功能就是图像处理。在Android里使用Opencv有三种方式：</p>
+<ol>
+<li>使用OpenCv Manager+ OpenCv android sdk</li>
+<li>使用OpenCv android sdk + OpenCv动态库</li>
+<li>使用OpenCv动态库+JNI。</li>
+</ol>
+<p><html>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</html>第一种方式对于开发者来说是最简单的，但是对用户是最不友好的，因为要想使用OpenCv的功能还需要安装OpenCv Manager这个APK，试想一下如果用户要用你的app还得去安装别的app谁能接受呢？当然了，使用这种方式对于开发者来说是非常快速的，因为OpenCv提供的AndroidSDK提供了一套Java层的接口，因此开发人员只需要跟java打交道，不需要接触jni。</p>
+<p><html>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</html>使用第二种方式即Opencv android sdk+动态库，可以避免安装OpenCv Manager app但是需要开发人员利用make或cmake自行编译动态库，同时会使我们的app体积增大。而且有的功能opencv sdk并没有提供，依然需要些jni自己实现。</p>
+<p><html>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</html>使用第三种方式就是直接使用Opencv动态库+JNI的方式进行开发，这种方式要求开发人员掌握NDK开发、C++语言。这种方式性能高、可拓展性强、拥有很大自由度。虽然开发难度比较大，但是相比较于优点我个人还是倾向于选用此种方式来使用Opencv。</p>
+<h1 id="OpenCv在AS中的环境搭建"><a href="#OpenCv在AS中的环境搭建" class="headerlink" title="OpenCv在AS中的环境搭建"></a>OpenCv在AS中的环境搭建</h1><p><html>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</html>对于我个人来讲，我选择第三种方式，即Opencv动态库+JNI来使用Opencv，所以，本篇讲的就是以这种方式来搭建环境。</p>
+<h2 id="下载OpenCv-Android-SDK"><a href="#下载OpenCv-Android-SDK" class="headerlink" title="下载OpenCv Android SDK"></a>下载OpenCv Android SDK</h2><p><html>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</html>下载地址：<a href="https://opencv.org/releases.html" target="_blank" rel="noopener">https://opencv.org/releases.html</a>，下载后解压即可。</p>
+<h2 id="创建App项目"><a href="#创建App项目" class="headerlink" title="创建App项目"></a>创建App项目</h2><p><html>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</html>创建app时需要勾选C++支持，具体的请看NDK开发系列的《NDK开发环境搭建》。</p>
+<p><html>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</html>项目创建app后把下载解压后的Opencv sdk的sdk/native/jni目录下的include目录整个都拷贝到main/cpp目录下。同时把sdk/native/libs下相关的libopencv_java3.so文件拷贝到src/main/jniLibs目录下，如果app里没有这个目录，就手动创建一下。</p>
+<h2 id="配置CMake文件"><a href="#配置CMake文件" class="headerlink" title="配置CMake文件"></a>配置CMake文件</h2><p><html>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</html>Opencv动态库的编译配置是最重要的，如果不需要jni开发就忽略此步骤。<br><strong>1.包含头文件目录</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">include_directories(src/main/cpp/include)</span><br></pre></td></tr></table></figure>
+<p><strong>2.t添加OpenCv动态库</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">add_library( libopencv_java3 SHARED IMPORTED )</span><br></pre></td></tr></table></figure>
+<p><strong>3.指定opencv动态库路径</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">set_target_properties( libopencv_java3 PROPERTIES IMPORTED_LOCATION &quot;$&#123;CMAKE_SOURCE_DIR&#125;/src/main/jniLibs/$&#123;ANDROID_ABI&#125;/libopencv_java3.so&quot; )</span><br></pre></td></tr></table></figure>
+<p><strong>4.设置源文件目录</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">aux_source_directory(src/main/cpp/source SOURCE_DIR)</span><br><span class="line">add_library( native-lib SHARED $&#123;CMAKE_SOURCE_DIR&#125;/src/main/cpp/source/native-lib.cpp )</span><br><span class="line">target_link_libraries( native-lib libopencv_java3 $&#123;log-lib&#125;  $ )</span><br></pre></td></tr></table></figure>
+<p><html>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</html>通过以上配置，就完成了编译OpenCv Jni的环境了，完整的文件如下所示：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line">   # CMake的最低版本要求</span><br><span class="line">   cmake_minimum_required(VERSION 3.4.1)</span><br><span class="line"></span><br><span class="line">   #设置一个路径变量DIR，路径是 app/libs，这个$&#123;CMAKE_SOURCE_DIR&#125;就表示是当前CMakeLists.txt文件的路径</span><br><span class="line">   set(DIR $&#123;CMAKE_SOURCE_DIR&#125;/libs)</span><br><span class="line"></span><br><span class="line">   #定义一个变量 叫做AB，他的值是后面的字符串</span><br><span class="line">   set(AB &quot;这是一个变量&quot;)</span><br><span class="line">   #打印这个变量AB</span><br><span class="line">   MESSAGE(STATUS $&#123;AB&#125;)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"># 添加日志，如果不开启这个，在cpp文件里就无法打印日志，会报错</span><br><span class="line">find_library(</span><br><span class="line">              # android系统每个类型库存放在一个特定位置，而log库存放在log-lib中</span><br><span class="line">              log-lib</span><br><span class="line">              log )</span><br><span class="line"></span><br><span class="line">#设置生成的so动态库最后输出的路径,可以指定到任意目录</span><br><span class="line">#set(CMAKE_LIBRARY_OUTPUT_DIRECTORY $&#123;CMAKE_SOURCE_DIR&#125;/$&#123;ANDROID_ABI&#125;/)</span><br><span class="line"></span><br><span class="line">#set(native_srcs $&#123;CMAKE_SOURCE_DIR&#125;/src/main/cpp)</span><br><span class="line">#----------------- 开始OpenCv配置 ------------</span><br><span class="line"></span><br><span class="line">   #设置JniLibs</span><br><span class="line">   include_directories(src/main/cpp/include)</span><br><span class="line">   #添加opencv动态库</span><br><span class="line">   add_library( libopencv_java3 SHARED IMPORTED )</span><br><span class="line">   set(LIBRARY_DIRS &#123;DIR&#125;/jniLibs)</span><br><span class="line">   #指定opencv动态库路径</span><br><span class="line">   set_target_properties( libopencv_java3 PROPERTIES IMPORTED_LOCATION &quot;$&#123;CMAKE_SOURCE_DIR&#125;/src/main/jniLibs/$&#123;ANDROID_ABI&#125;/libopencv_java3.so&quot; )</span><br><span class="line">   # 设置源文件目录</span><br><span class="line">   aux_source_directory(src/main/cpp/source SOURCE_DIR)</span><br><span class="line">   add_library( native-lib SHARED $&#123;CMAKE_SOURCE_DIR&#125;/src/main/cpp/source/native-lib.cpp )</span><br><span class="line">   target_link_libraries( native-lib libopencv_java3 $&#123;log-lib&#125;  $ )</span><br><span class="line"></span><br><span class="line">#----------- OpenCv配置完成 -------------</span><br></pre></td></tr></table></figure>
+<p><html>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</html>至此，我们的Opencv在Android上使用的环境已经搭建好了，由于我们使用jni和Opencv的动态库来使用Opencv，所以此处不需要导入Opencv SDK的Android module。这样就减少了我们应用APP的安装包体积了。</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/11/15/线程的本质(在jvm里的实现)/" rel="next" title="java线程的本质(在jvm里的实现)">
+                <i class="fa fa-chevron-left"></i> java线程的本质(在jvm里的实现)
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/07/14/OpenCv(一)图像平滑处理-模糊/" rel="prev" title="OpenCv(一)图像平滑处理-模糊">
+                OpenCv(一)图像平滑处理-模糊 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">泼墨成空</p>
+              <p class="site-description motion-element" itemprop="description">沉下心来好好耕耘。</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">44</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">13</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#OpenCv的三种使用方式"><span class="nav-number">1.</span> <span class="nav-text">OpenCv的三种使用方式</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#OpenCv在AS中的环境搭建"><span class="nav-number">2.</span> <span class="nav-text">OpenCv在AS中的环境搭建</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#下载OpenCv-Android-SDK"><span class="nav-number">2.1.</span> <span class="nav-text">下载OpenCv Android SDK</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#创建App项目"><span class="nav-number">2.2.</span> <span class="nav-text">创建App项目</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#配置CMake文件"><span class="nav-number">2.3.</span> <span class="nav-text">配置CMake文件</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">泼墨成空</span>
+
+  
+</div>
+
+
+
+
+
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+  
+
+
+
+  
+  
+
+
+
+  
+  
+
+
+
+  
+  
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/canvas-nest/canvas-nest.min.js"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/three/three.min.js"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/three/three-waves.min.js"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/three/canvas_lines.min.js"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/three/canvas_sphere.min.js"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
