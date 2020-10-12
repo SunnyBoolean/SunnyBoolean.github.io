@@ -1,0 +1,723 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Hexo, NexT">
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;文前贴一篇讲解比较好的博客：《Java 泛型，你了解类型擦除吗？》 泛型的由来&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;在了解泛型之前，我们先提出一个问题，Java的集合里能存储多类型的对象吗，比如List能否既存储String又能存储int和Oject元素呢？ &amp;nbsp">
+<meta property="og:type" content="website">
+<meta property="og:title" content="掌握泛型">
+<meta property="og:url" content="http://yoursite.com/java泛型.html">
+<meta property="og:site_name" content="Wili&amp;Demo">
+<meta property="og:description" content="&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;文前贴一篇讲解比较好的博客：《Java 泛型，你了解类型擦除吗？》 泛型的由来&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;在了解泛型之前，我们先提出一个问题，Java的集合里能存储多类型的对象吗，比如List能否既存储String又能存储int和Oject元素呢？ &amp;nbsp">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2018-12-05T01:26:48.500Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="掌握泛型">
+<meta name="twitter:description" content="&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;文前贴一篇讲解比较好的博客：《Java 泛型，你了解类型擦除吗？》 泛型的由来&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;在了解泛型之前，我们先提出一个问题，Java的集合里能存储多类型的对象吗，比如List能否既存储String又能存储int和Oject元素呢？ &amp;nbsp">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/java泛型.html">
+
+
+
+
+
+  <title>掌握泛型 | Wili&Demo</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope="" itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Wili&Demo</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">要想无心很容易，在乎才需要勇气。</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br>
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-schedule">
+          <a href="/schedule/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-calendar"></i> <br>
+            
+            学习计划
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+    
+    
+    <div class="post-block page">
+      <header class="post-header">
+
+	<h1 class="post-title" itemprop="name headline">掌握泛型</h1>
+
+
+
+</header>
+
+      
+      
+      
+      <div class="post-body">
+        
+        
+          <p><html>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</html>文前贴一篇讲解比较好的博客：<a href="https://blog.csdn.net/briblue/article/details/76736356" target="_blank" rel="noopener">《Java 泛型，你了解类型擦除吗？》</a></p>
+<h1 id="泛型的由来"><a href="#泛型的由来" class="headerlink" title="泛型的由来"></a>泛型的由来</h1><p><html>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</html>在了解泛型之前，我们先提出一个问题，Java的集合里能存储多类型的对象吗，比如List能否既存储String又能存储int和Oject元素呢？</p>
+<p><html>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</html>答案是：可以。</p>
+<p><html>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</html>下面我们以List为例，看下添加多个不同类型的元素：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">       List list = <span class="keyword">new</span> ArrayList();</span><br><span class="line">       Teacher teacher = <span class="keyword">new</span> Teacher();</span><br><span class="line">       list.add(<span class="number">1</span>);</span><br><span class="line">       list.add(<span class="string">"abc"</span>);</span><br><span class="line">       list.add(teacher);</span><br><span class="line"> &#125;</span><br></pre></td></tr></table></figure>
+<p><html>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</html>上面的写法本身不存在问题，编译器也不会报错，毕竟add()方法默认参数类型是Object类型，所以理论上你可以添加任何对象。但是问题在于获取数据的时候，我们获取集合元素的时候需要强转成对应的类型，如果一个集合里存在多种类型，那在获取的时候我们就很难判断强转成什么类型的对象了。所以在获取元素的时候并不是安全的。</p>
+<p><html>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</html>为了解决这种强转导致的异常，jdk的设计者们想到一个法子，那就是引入泛型，引入泛型后，集合里就可以指定只存放指定类型的对象了，就无法存放别的对象了，这样在读取时也不存在类型转换的问题了，泛型使用如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">public static void main(String[] args) &#123;</span><br><span class="line">    List&lt;String&gt; list = new ArrayList();  //这里泛型指定String类型</span><br><span class="line">    Teacher teacher = new Teacher();</span><br><span class="line">    list.add(1);  //  这里会报错</span><br><span class="line">    list.add(&quot;abc&quot;);</span><br><span class="line">    list.add(teacher);  //这里会报错</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><html>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</html>有了泛型就规范了一个集合只能添加什么类型的对象，再也不会有类型转换异常的问题发生，泛型的好处如下：</p>
+<ol>
+<li>类型安全。类型错误在编译期间就会捕获，而不是在运行时当作ClassCastException展示出来。</li>
+<li>清除代码中大量的强制类型转换，增强了代码可读性。</li>
+<li>为优化拓展带来了无限可能。</li>
+</ol>
+<hr>
+<h1 id="泛型的使用"><a href="#泛型的使用" class="headerlink" title="泛型的使用"></a>泛型的使用</h1><p><html>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</html>泛型可以用在类或者接口中，在java的集合体系中，List、Map接口都用上了泛型，使用如下：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">IGeneric</span>&lt;<span class="title">T</span>,<span class="title">K</span>,<span class="title">V</span>&gt; </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> T <span class="title">getType</span><span class="params">()</span></span>;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> V <span class="title">getValue</span><span class="params">(K k)</span></span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Student</span>&lt;<span class="title">K</span>,<span class="title">V</span>&gt; <span class="keyword">implements</span> <span class="title">Serializable</span> </span>&#123;</span><br><span class="line">    <span class="keyword">public</span> String name;</span><br><span class="line">    <span class="keyword">private</span> V v;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">Student</span><span class="params">(String name)</span></span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.name=name;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> V <span class="title">getValue</span><span class="params">(K k)</span></span>&#123;</span><br><span class="line">     <span class="keyword">return</span> v;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><html>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</html>上面有一个接口用了三个泛型类型参数，还有一个类有两个泛型类型参数，首先我们看下IGeneric的实现类：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">GenericImpl</span> <span class="keyword">implements</span> <span class="title">IGeneric</span>&lt;<span class="title">Integer</span>,<span class="title">String</span>,<span class="title">Student</span>&gt; </span>&#123;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> Integer <span class="title">getType</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> Student <span class="title">getValue</span><span class="params">(String s)</span> </span>&#123;</span><br><span class="line">        Student&lt;Integer,String&gt; student = <span class="keyword">new</span> Student(s);</span><br><span class="line">        String str=student.getValue(<span class="number">1</span>);</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> Student(s);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><html>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</html>可以看到，我们在实现IGeneric接口时泛型参数分别是Integer、String、Student，相应的方法也返回了对应的类型。同时我们在创建Student对象的时候也是传递了Integer和String类型的参数，这样Student中K和V的类型就被确定下来。到这里应该可以感受到泛型的强大之处了吧。</p>
+<hr>
+<h1 id="泛型的本质"><a href="#泛型的本质" class="headerlink" title="泛型的本质"></a>泛型的本质</h1><p><html>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</html>上面的例子已经演示了如何定义使用泛型，泛型的本质也就是如此：</p>
+<blockquote>
+<p>允许在定义接口、类的时候声明类型形参，类型形参在整个接口、类体中可以当成类型使用，几乎所有可使用普通类型的地方都可以使用这种类型形参。</p>
+</blockquote>
+<p><html>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</html>我们在不确定一个成员变量类型的时候就可以使用泛型代替，等实际使用的时候再确定类型的参数即可，比如List的实现，他在定义的时候就用到了泛型并没有规定存储什么参数，是在创建List对象的时候才指定元素类型。 </p>
+<hr>
+<h1 id="泛型的子类"><a href="#泛型的子类" class="headerlink" title="泛型的子类"></a>泛型的子类</h1><p><html>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</html>当我们在继承一个有泛型参数的类时，就要额外注意一下写法，继承时子类要么不要在父类名后面使用泛型，要么明确参数名称，我们以上面Student泛型类为例，写一个Student的子类如下：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">StudentA</span> <span class="keyword">extends</span> <span class="title">Student</span>&lt;<span class="title">K</span>,<span class="title">V</span>&gt;</span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">StudentA</span><span class="params">(String name)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">super</span>(name);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><html>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</html>上面的写法就会报错，因为Student已经是个泛型，在继承时就不能再Student名字后加泛型，要么啥都不加，要么指定类型，以下子类继承的写法都是正确的：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//不指定父类泛型类型</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">StudentB</span> <span class="keyword">extends</span> <span class="title">Student</span></span>&#123;&#125;</span><br><span class="line"><span class="comment">//指定父类泛型类型</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">StudentC</span> <span class="keyword">extends</span> <span class="title">Student</span>&lt;<span class="title">Integer</span>,<span class="title">String</span>&gt;</span>&#123;&#125;</span><br><span class="line"><span class="comment">//不指定父类泛型且子类是泛型</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">StudentD</span>&lt;<span class="title">K</span>,<span class="title">V</span>&gt; <span class="keyword">extends</span> <span class="title">Student</span></span>&#123;&#125;</span><br><span class="line"><span class="comment">//指定父类泛型且子类也是个泛型</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Student</span>&lt;<span class="title">K</span>,<span class="title">V</span>&gt; <span class="keyword">extends</span> <span class="title">Student</span>&lt;<span class="title">Integer</span>,<span class="title">String</span>&gt;</span>&#123;&#125;</span><br><span class="line"><span class="comment">//父类和子类都是泛型，且泛型参数一致</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Student</span>&lt;<span class="title">K</span>,<span class="title">V</span>&gt; <span class="keyword">extends</span> <span class="title">Student</span>&lt;<span class="title">K</span>,<span class="title">V</span>&gt;</span>&#123;&#125;</span><br></pre></td></tr></table></figure>
+<p><html>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</html> 正如上面演示所示，子类在继承泛型父类时，可以指定父类泛型类型也可以不指定，如果子类也是泛型，那可以指定父类泛型类型也可以不指定，也可以让父类泛型和子类泛型一致。</p>
+<p><html>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</html> <strong>接口同理</strong></p>
+<hr>
+<h1 id="泛型方法"><a href="#泛型方法" class="headerlink" title="泛型方法"></a>泛型方法</h1><p><html>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</html>上面我们说的都是在类和接口上使用泛型，泛型也可以用在方法上，即使类没有泛型参数，我们也可以在方法上加入泛型来规定需要传什么参数，这中泛型方法在封装SDK api的时候非常实用：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">GenTest</span> </span>&#123;</span><br><span class="line">    <span class="keyword">public</span>  &lt;E&gt; <span class="function">String <span class="title">getName</span><span class="params">(E e)</span></span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="string">"字符串"</span>+ e;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span>  &lt;E&gt; <span class="function">E <span class="title">getValue</span><span class="params">(E e)</span></span>&#123;</span><br><span class="line">        <span class="keyword">return</span> e;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><html>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</html>可以看到我们有一个GenTest类，他并没有任何泛型形参，只有一个getName()方法，此方法带有泛型形参，并且这个泛型参数作为入参，还有一个getValue()方法，泛型E作为入参和出参，使用如下：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">     GenTest test = <span class="keyword">new</span> GenTest();</span><br><span class="line">     </span><br><span class="line">     test.&lt;String&gt;getName(<span class="string">"张三"</span>);  <span class="comment">//带泛型类型</span></span><br><span class="line">     test.getName(<span class="string">"里四"</span>);   <span class="comment">//不带泛型类型</span></span><br><span class="line">    </span><br><span class="line">     String ds=test.getValue(<span class="string">"666"</span>);  <span class="comment">//不带泛型类型</span></span><br><span class="line">     Student stu = test.&lt;Student&gt;getValue(<span class="keyword">new</span> Student()); <span class="comment">//带泛型类型</span></span><br><span class="line"> &#125;</span><br></pre></td></tr></table></figure>
+<p><html>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</html>如上所示，在调用泛型方法时，可以带泛型参数类型，也可以不带，都不影响。</p>
+<p><html>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</html>有了泛型方法，我们就可以让一个方法接受任何类型的参数和返回任何类型的值，选择权交给调用者，这对设计api有极大帮助。</p>
+<p><html>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</html><strong>需要注意的是，泛型方法中定义的泛型参数只能在该方法中使用，而类、接口的泛型参数则可以在整个类里使用。</strong></p>
+<hr>
+<h1 id="泛型构造器"><a href="#泛型构造器" class="headerlink" title="泛型构造器"></a>泛型构造器</h1><p><html>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</html>既然在方法中可以使用泛型，那么在构造器上加泛型也是可以的吧？当然是可以的，在构造器上加入泛型我们称之为泛型构造器，我们在GenTest上加一个泛型构造器如下：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">GenTest</span> </span>&#123;</span><br><span class="line">    <span class="keyword">public</span> &lt;T&gt; GenTest(T t)&#123;</span><br><span class="line">        System.out.println(t);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><html>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</html>在使用时，我们传入泛型类型或者不穿也行，如下是使用方法：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">GenTest test = <span class="keyword">new</span> GenTest(<span class="string">"666"</span>); <span class="comment">//不加泛型类型</span></span><br><span class="line"> GenTest test1 = <span class="keyword">new</span> &lt;Integer&gt; GenTest(<span class="number">666</span>);<span class="comment">//在new后面加上泛型类型</span></span><br></pre></td></tr></table></figure>
+<p><html>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</html>需要注意的是，如果一个泛型类又具有泛型构造器，那么早创建对象的时候就要注意了，以下写法没毛病:</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">GenTest</span>&lt;<span class="title">K</span>&gt; </span>&#123;</span><br><span class="line">    <span class="keyword">public</span> &lt;T&gt; GenTest(T t)&#123;</span><br><span class="line">        System.out.println(t);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//这个写法没问题</span></span><br><span class="line">GenTest&lt;String&gt; test1 = <span class="keyword">new</span> &lt;Integer&gt; GenTest&lt;String&gt;(<span class="number">666</span>);</span><br></pre></td></tr></table></figure>
+<p><html>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</html>上面我们创建GenTest对象时，把所有的泛型类型都带上了，<string>是类的泛型类型，<integer>是泛型构造器的泛型类型。最简单的写法是可以把<string>和<integer>都省略不写。</integer></string></integer></string></p>
+<hr>
+<h1 id="类型通配符"><a href="#类型通配符" class="headerlink" title="类型通配符"></a>类型通配符</h1><p><html>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</html>类型通配符就是匹配任意类型的类型实参。</p>
+<p><html>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</html>类型通配符就是一个 “?”符号，将一个问好作为类型实参传递给List集合，写作List&lt;?&gt;，意思是元素类型未知，可以添加任何类型的元素，如下是List的任意类型：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//一个能接受任意元素类型的集合</span></span><br><span class="line"><span class="function"><span class="keyword">public</span>  <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">test</span><span class="params">(List&lt;?&gt; c)</span></span>&#123;</span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> i =<span class="number">0</span>;i&lt;c.size();i++)&#123;</span><br><span class="line">        System.out.println(c.get(i));</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">    List list = <span class="keyword">new</span> ArrayList();</span><br><span class="line">    list.add(<span class="string">"ss"</span>);</span><br><span class="line">    list.add(<span class="number">123</span>);</span><br><span class="line">    list.add(<span class="keyword">new</span> Teacher());</span><br><span class="line">    test(list);</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><html>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</html>正如上所示，我们写一个test方法，接受的参数是一个List集合，此集合的元素可以是任何元素(因为我们用任意通配符 ? 来表示了)。</p>
+<p><html>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</html>但是我们不能用任意通配符来添加元素，因为集合会不知道你到底要添加什么元素，如下就会报错：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">     List&lt;?&gt; list = <span class="keyword">new</span> ArrayList(); <span class="comment">//不报错</span></span><br><span class="line">     list.add(<span class="string">"ss"</span>);  <span class="comment">//报错</span></span><br><span class="line">     list.add(<span class="number">123</span>);  <span class="comment">//报错</span></span><br><span class="line">     list.add(<span class="keyword">new</span> Teacher());  <span class="comment">//报错</span></span><br><span class="line"> &#125;</span><br></pre></td></tr></table></figure>
+<h2 id="上限通配符"><a href="#上限通配符" class="headerlink" title="上限通配符"></a>上限通配符</h2><p><html>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</html>上限通配符就是只能使用指定类型的子类或者其本身。最高也只能是 extends 后面的类型。如下例子：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Jclass</span>&lt;<span class="title">E</span> <span class="keyword">extends</span> <span class="title">GenTest</span>&gt; </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">nothing</span><span class="params">(String str)</span></span>&#123;</span><br><span class="line">        System.out.println(<span class="string">"==="</span>+str);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><html>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</html>上面我们定义的一个泛型类就是指定了泛型参数类型只能是GenTest类，在使用的时候就不能给不在这个限制之类的对象，使用如下：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Jclass&lt;GTest&gt; testJclass = <span class="keyword">new</span> Jclass&lt;&gt;();<span class="comment">//可以，GTest是GenTest的子类</span></span><br><span class="line">Jclass&lt;Student&gt; tes1 = <span class="keyword">new</span> Jclass&lt;Student&gt;();<span class="comment">//报错，因为Student不是GenTest的子类，泛型类型有问题</span></span><br></pre></td></tr></table></figure>
+<p><html>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</html>第一种写法没问题，第二种写法就有问题，因为泛型参数类型不是GenTest的子类，所以在编译器就会报错。</p>
+<h2 id="下限通配符"><a href="#下限通配符" class="headerlink" title="下限通配符"></a>下限通配符</h2><p><html>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</html>上限通配符跟下限通配符的用法一样，只是规则不一样，下限通配符规定只能使用 super 后面类的子类，如下一个集合：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">List&lt;? <span class="keyword">super</span> GenTest&gt; list = <span class="keyword">new</span> ArrayList&lt;&gt;();</span><br><span class="line">list.add(<span class="keyword">new</span> GTest(<span class="string">""</span>));</span><br><span class="line">list.add(<span class="keyword">new</span> GenTest(<span class="string">"ss"</span>));</span><br></pre></td></tr></table></figure>
+<p><html>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</html>GTest是GenTest的子类，所以上面的写法没有问题，如果改成这样就有问题：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">List&lt;? <span class="keyword">super</span> GTest&gt; list = <span class="keyword">new</span> ArrayList&lt;&gt;();</span><br><span class="line"> list.add(<span class="keyword">new</span> GTest(<span class="string">""</span>));</span><br><span class="line"> list.add(<span class="keyword">new</span> GenTest(<span class="string">"ss"</span>)); <span class="comment">//这里会报错</span></span><br></pre></td></tr></table></figure>
+<hr>
+<h1 id="泛型擦除"><a href="#泛型擦除" class="headerlink" title="泛型擦除"></a>泛型擦除</h1><p><html>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</html>正常情况下，我们写的泛型类在编译后，所有&lt;&gt;里的信息都会被替换成Object类型，准确来说，不是所有的类型都会被转换成Object，也有的会被转换成”父类”。如下例子：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Okao</span>&lt;<span class="title">T</span>&gt; </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> T t;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">Okao</span><span class="params">(T t)</span></span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.t = t;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><html>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</html>上面是一个基本的泛型，在编译后他就变成这样了：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Okao</span></span>&#123;</span><br><span class="line">    <span class="keyword">private</span> Object t;  <span class="comment">//原来的T变成Object</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">Okao</span><span class="params">(Object t)</span></span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.t = t;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><html>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</html>以上是普通情况下，我们的泛型T是无上限的，也就是说他的父类是Object，所以在编译后就被替换成Object，下面我们使用一个上限通配符如下：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Okao</span>&lt;<span class="title">T</span> <span class="keyword">extends</span> <span class="title">GenTest</span>&gt;</span>&#123;</span><br><span class="line">    <span class="keyword">private</span> T t;  </span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">Okao</span><span class="params">(T t)</span></span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.t = t;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><html>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</html>上面的类被编译后就变成这样子：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Okao</span></span>&#123;</span><br><span class="line">    <span class="keyword">private</span> GenTest t;  <span class="comment">//原来的T变成GenTest</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">Okao</span><span class="params">(GenTest t)</span></span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.t = t;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><html>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</html>口说无凭，我们下面来通过反射来模拟一下获取这些泛型属性是什么类型的，第一种情况如下：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Okao</span>&lt;<span class="title">T</span>&gt;</span>&#123;</span><br><span class="line">    <span class="keyword">private</span> T t;  <span class="comment">//原来的T变成GenTest</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">Okao</span><span class="params">(T t)</span></span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.t = t;</span><br><span class="line">        System.out.println(<span class="string">"类名："</span>+t.getClass().getName());</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        Okao okao = <span class="keyword">new</span> Okao(<span class="string">"字符串啊"</span>);</span><br><span class="line">        Class cls = okao.getClass();</span><br><span class="line">        Field[] fields = cls.getDeclaredFields();</span><br><span class="line">        Field field=fields[<span class="number">0</span>];</span><br><span class="line">        System.out.println(<span class="string">"变量名称："</span>+field.getName()+<span class="string">"  变量类型： "</span>+field.getType().getName());</span><br><span class="line"></span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+<p><html>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</html>我们在Okao的构造器里打印一下传的参数的名称，在main方法里通过反射获取Okao的变量的名称和类型，输出结果如下：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">类名：java.lang.String</span><br><span class="line">变量名称：t  变量类型： java.lang.Object</span><br></pre></td></tr></table></figure>
+<p><html>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</html>可以看到，构造器输出的是String类名，而main方法里通过反射取到变量v的类型是Object类型，所以泛型被擦出后被替换成Object了。</p>
+<p><html>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</html>第二种情况就是有限制范围的泛型，他就不会被转成Object，如下：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Okao</span>&lt;<span class="title">T</span> <span class="keyword">extends</span> <span class="title">GenTest</span>&gt;</span>&#123;</span><br><span class="line">    <span class="keyword">private</span> T t;  <span class="comment">//原来的T变成GenTest</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">Okao</span><span class="params">(T t)</span></span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.t = t;</span><br><span class="line">        System.out.println(<span class="string">"类名："</span>+t.getClass().getName());</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        Okao okao = <span class="keyword">new</span> Okao(<span class="keyword">new</span> GenTest(<span class="string">"泛型擦除"</span>));</span><br><span class="line">        Class cls = okao.getClass();</span><br><span class="line">        Field[] fields = cls.getDeclaredFields();</span><br><span class="line">        Field field=fields[<span class="number">0</span>];</span><br><span class="line">        System.out.println(<span class="string">"变量名称："</span>+field.getName()+<span class="string">"  变量类型： "</span>+field.getType().getName());</span><br><span class="line"></span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+<p><html>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</html>输出内容如下：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">类名：com.geo.njava.GenTest</span><br><span class="line">变量名称：t  变量类型： com.geo.njava.GenTest</span><br></pre></td></tr></table></figure>
+<p><html>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</html>总之，泛型擦出并不总是&lt;&gt;符号里的类型被替换成Object了，如果有通配符限制，他就会被转换成最高限制的类型。</p>
+<hr>
+<h1 id="泛型擦除引起的问题"><a href="#泛型擦除引起的问题" class="headerlink" title="泛型擦除引起的问题"></a>泛型擦除引起的问题</h1><p><html>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</html>我们已经知道泛型在被编译后其类型信息会被擦出，那么就很容易理解在使用泛型时候的一些限制和问题了，主要问题如下：</p>
+<p><html>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</html>1. 泛型变量不能使用static关键字，如下就是错误的：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Okao</span>&lt;<span class="title">T</span>&gt;</span>&#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> T t;  <span class="comment">//会报错</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><html>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</html>这个很容易理解，因为泛型类中的泛型参数类型是在创建对象的时候指定的，也就是这个T是在创建对象的时候才能确定，而static变量是跟对象无关的，他是只跟类相关的，如果还没创建对象我们是无法确定T的类型的，所以static类型的泛型变量在编译器就会被检查报错。</p>
+<p><html>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</html>但是泛型方法是可以为static的，因为泛型方法是我们在调用方法的时候确定泛型参数的类型，如下是没有问题的：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="keyword">private</span>  <span class="keyword">static</span>  &lt;E&gt; <span class="function"><span class="keyword">void</span> <span class="title">fun</span><span class="params">(E e)</span></span>&#123;</span><br><span class="line">    System.out.println(<span class="string">"静态的泛型方法"</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>2.不能实例化泛型</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">  </span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Okao</span>&lt;<span class="title">T</span>&gt;</span>&#123;</span><br><span class="line">    <span class="keyword">private</span>  T t = <span class="keyword">new</span> T();  <span class="comment">//会报错</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><html>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</html>原理是一样的，泛型在编译后就被擦除了，就无法知道原来的类型是什么了。</p>
+<p>3.集合不能使用基本类型的泛型，如下是错误的：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">List&lt;double&gt; list = new ArrayList();</span><br></pre></td></tr></table></figure>
+<p><html>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</html>因为泛型擦除后就变成Object了，而不是double，此处如果改成Double就可以没毛病了。</p>
+
+        
+      </div>
+      
+      
+      
+    </div>
+    
+    
+    
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">Wili</p>
+              <p class="site-description motion-element" itemprop="description">沉下心来好好耕耘</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">43</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">11</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#泛型的由来"><span class="nav-number">1.</span> <span class="nav-text">泛型的由来</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#泛型的使用"><span class="nav-number">2.</span> <span class="nav-text">泛型的使用</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#泛型的本质"><span class="nav-number">3.</span> <span class="nav-text">泛型的本质</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#泛型的子类"><span class="nav-number">4.</span> <span class="nav-text">泛型的子类</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#泛型方法"><span class="nav-number">5.</span> <span class="nav-text">泛型方法</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#泛型构造器"><span class="nav-number">6.</span> <span class="nav-text">泛型构造器</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#类型通配符"><span class="nav-number">7.</span> <span class="nav-text">类型通配符</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#上限通配符"><span class="nav-number">7.1.</span> <span class="nav-text">上限通配符</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#下限通配符"><span class="nav-number">7.2.</span> <span class="nav-text">下限通配符</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#泛型擦除"><span class="nav-number">8.</span> <span class="nav-text">泛型擦除</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#泛型擦除引起的问题"><span class="nav-number">9.</span> <span class="nav-text">泛型擦除引起的问题</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Wili</span>
+
+  
+</div>
+
+
+
+
+
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+  
+
+
+
+  
+  
+
+
+
+  
+  
+
+
+
+  
+  
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/canvas-nest/canvas-nest.min.js"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/three/three.min.js"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/three/three-waves.min.js"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/three/canvas_lines.min.js"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/three/canvas_sphere.min.js"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

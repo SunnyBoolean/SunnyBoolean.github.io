@@ -1,0 +1,974 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Hexo, NexT">
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;jni入门从HelloWorld开始。 HelloWorld&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;首先写一个类，专门用于操作本地方法的工具类(可以任意命名)，在这个类里，首先我们就要加载native-lib.so文件，然后定义相关的native方法。1234567pub">
+<meta property="og:type" content="article">
+<meta property="og:title" content="JNI基础入门">
+<meta property="og:url" content="http://yoursite.com/2017/06/24/JNI基础入门/index.html">
+<meta property="og:site_name" content="Wili&amp;Demo">
+<meta property="og:description" content="&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;jni入门从HelloWorld开始。 HelloWorld&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;首先写一个类，专门用于操作本地方法的工具类(可以任意命名)，在这个类里，首先我们就要加载native-lib.so文件，然后定义相关的native方法。1234567pub">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://bmob-cdn-22219.b0.upaiyun.com/2019/01/10/03d5304b40646551800153bd46347d1e.png">
+<meta property="og:updated_time" content="2019-01-10T13:19:18.521Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="JNI基础入门">
+<meta name="twitter:description" content="&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;jni入门从HelloWorld开始。 HelloWorld&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;首先写一个类，专门用于操作本地方法的工具类(可以任意命名)，在这个类里，首先我们就要加载native-lib.so文件，然后定义相关的native方法。1234567pub">
+<meta name="twitter:image" content="http://bmob-cdn-22219.b0.upaiyun.com/2019/01/10/03d5304b40646551800153bd46347d1e.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2017/06/24/JNI基础入门/">
+
+
+
+
+
+  <title>JNI基础入门 | Wili&Demo</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope="" itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Wili&Demo</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">要想无心很容易，在乎才需要勇气。</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br>
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-schedule">
+          <a href="/schedule/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-calendar"></i> <br>
+            
+            学习计划
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/06/24/JNI基础入门/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Wili">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Wili&Demo">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">JNI基础入门</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-06-24T18:41:09+08:00">
+                2017-06-24
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
+                  <a href="/categories/NDK开发/" itemprop="url" rel="index">
+                    <span itemprop="name">NDK开发</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p><html>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</html>jni入门从HelloWorld开始。</p>
+<h1 id="HelloWorld"><a href="#HelloWorld" class="headerlink" title="HelloWorld"></a>HelloWorld</h1><p><html>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</html>首先写一个类，专门用于操作本地方法的工具类(可以任意命名)，在这个类里，首先我们就要加载native-lib.so文件，然后定义相关的native方法。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">JniUtil</span> </span>&#123;</span><br><span class="line">    <span class="keyword">static</span> &#123;</span><br><span class="line">        System.loadLibrary(<span class="string">"native-lib"</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">//HelloWorld</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">native</span> String <span class="title">helloWorld</span><span class="params">()</span></span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p><html>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</html>关于native-lib.so文件的配置、 编译生成就不详细述说了，再前面《NDK开发环境搭建》和《CMakeLists.txt详解》里已经说过。</p>
+<p><html>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</html>紧接着我们看下native-lib.cpp文件：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;jni.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="keyword">extern</span> <span class="string">"C"</span></span><br><span class="line">JNIEXPORT jstring JNICALL</span><br><span class="line">Java_com_geo_util_JniUtil_helloWorld(JNIEnv *env, jclass type) &#123;</span><br><span class="line">    <span class="keyword">return</span> env-&gt;NewStringUTF( <span class="string">"HelloWorld from C++"</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><html>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</html>然后就是MainActivity里调用了：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">MainActivity</span> <span class="keyword">extends</span> <span class="title">AppCompatActivity</span> </span>&#123;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">onCreate</span><span class="params">(Bundle savedInstanceState)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">super</span>.onCreate(savedInstanceState);</span><br><span class="line">        setContentView(R.layout.activity_main);</span><br><span class="line">        TextView tv = (TextView) findViewById(R.id.sample_text);</span><br><span class="line">        <span class="comment">//调用本地方法，这个方法是C++层返回的字符串</span></span><br><span class="line">        StringBuilder sb = <span class="keyword">new</span> StringBuilder();</span><br><span class="line">        sb.append(<span class="string">"\n\n"</span>+JniUtil.helloWorld());</span><br><span class="line">        tv.setText(sb.toString());</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><html>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</html>以上就完成了一个java层调用native方法的完整流程，当然其中的编译动态库是as来执行cmake脚本文件完成的。</p>
+<p><html>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</html>这里说一个小tip，当我们在JniUtil里写好native放法的时候，AS会提示这个二方法报红色错误，这时候只要按住alt+Enter键就会自动帮我们在native-lib里生成相关的方法。</p>
+<hr>
+<h1 id="JNI文件语法初窥"><a href="#JNI文件语法初窥" class="headerlink" title="JNI文件语法初窥"></a>JNI文件语法初窥</h1><p><html>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</html>从native-lib.cpp里可一看出来helloworld()方法有一个规律，即<strong>方法的命名是包名+”_”+类名+方法名构成</strong>。<strong>这个是jni的命名规则，只有这样严格的命名JVM在调用native方法时才能准确找到方法。</strong></p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;jni.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="keyword">extern</span> <span class="string">"C"</span></span><br><span class="line">JNIEXPORT jstring JNICALL</span><br><span class="line">Java_com_geo_util_JniUtil_helloWorld(JNIEnv *env, jclass type) &#123;</span><br><span class="line">    <span class="keyword">return</span> env-&gt;NewStringUTF( <span class="string">"HelloWorld from C++"</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><html>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</html>下面我们详细讲解native-lib.cpp文件的内容都是什么含义，对于不了解C++和jni的朋友可以有一个更好的认识。</p>
+<p><strong>1. extern  “C”</strong></p>
+<p><html>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</html>第三行的 “extern  “C””是为了解决C++在编译的时候为了解决函数的多态问题，会将函数名和参数联合起来生成一个中间的函数名称，而C语言不会(所以C文件里不需要这个语句)，所以C++里很容易造成链接时找不到对应函数的情况，此时C++文件通过 extern “C”进行链接指定，这句话告诉编译器，<strong>请保持我的名称，不要给我生成用于链接的中间函数名</strong>。</p>
+<p><html>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</html>如果我们把native-lib.cpp里的extern “C”改成 extern “C++”或者其他的，甚至去掉不要都会报<strong>java.lang.UnsatisfiedLinkError: No implementation found for java.lang.String com.geo.util.JniUtil.helloWorld()</strong>错哦。</p>
+<p><html>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</html>当然了，如果有多个方法，则后面应该用花括号包裹起来，即 <strong>extern “C”{  方法1()  方法2() …}</strong></p>
+<p><strong>2. JNIEXPORT jstring JNICALL</strong></p>
+<p><html>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</html>在第四行有这样一句话：<strong>JNIEXPORT jstring JNICALL</strong>，其中JNIEXPORT和JNICALL都是jni的关键字，表示此函数是被JNI调用的，这两个宏在不同的操作系统定义是不一样的，这里就不细说了。中间的jstring是函数的返回类型，这里的jstring对应java的String类型，如果方法没有返回值就是Void。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">//函数返回字符串</span><br><span class="line">JNIEXPORT jstring JNICALL</span><br><span class="line">//函数没有返回值</span><br><span class="line">JNIEXPORT void JNICALL</span><br><span class="line">//函数返回int类型</span><br><span class="line">JNIEXPORT jint JNICALL</span><br><span class="line">//函数返回double类型</span><br><span class="line">JNIEXPORT jdouble JNICALL</span><br></pre></td></tr></table></figure>
+<p><strong>3.方法名</strong></p>
+<p><html>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</html>看第六行，这个函数的名称有点长。关于函数的命名上面已经说过了，根据JNI的规范，函数名必须是””包名+下划线+类型+java方法名”，这样命名JVM在调用时才可以准确的找到这个native方法。</p>
+<p><strong>4.方法的参数</strong></p>
+<p><html>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</html>在第六中helloword函数的第一个参数JNIEnv* 是所有native函数的第一个参数，无论java中定义的native方法是否有参数，在cpp文件里相对于的函数的第一个参数一定是JNIEnv。这个参数是C++类中的一个实例，而JNI中的函数是以类的成员函数形式存在，所以在C++中，我们要调用相关JNI的方法，就可以直接通过“env-&gt;函数”来使用。</p>
+<p><html>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</html>第二个参数jclass是调用java中native方法的class对象，注意，因为我在JniUtil里定义的helloworld方法是static的，所以此处第二个参数是jclass类型，如果helloworld不是static的，此处第二个参数应该是jobject(表示调用java的native方法的对象，即JniUtil对象)。</p>
+<p><strong>5.返回值</strong></p>
+<p><html>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</html>在函数第六行，return返回了一个字符串“HelloWorld from C++”。我们要注意的是这个返回值的写法，他是通过实例env调用NewStringUTF()方法返回字符串的。因为在C++里只有字符char的概念，需要调用相关的方法转换成jstring才能返回给java层。</p>
+<h1 id="JNI里打印日志信息"><a href="#JNI里打印日志信息" class="headerlink" title="JNI里打印日志信息"></a>JNI里打印日志信息</h1><p><html>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</html>我们先掌握一下如何在JNI里打印日志输出，因为后面讲的所有内容都涉及到日志打印。</p>
+<h2 id="配置日志相关的库"><a href="#配置日志相关的库" class="headerlink" title="配置日志相关的库"></a>配置日志相关的库</h2><p><html>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</html>首先要在CMakeLists.txt里添加以下代码设置日志库：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"># 添加日志，如果不开启这个，在cpp文件里就无法打印日志，会报错</span><br><span class="line">find_library(</span><br><span class="line">              # android系统每个类型库存放在一个特定位置，而log库存放在log-lib中</span><br><span class="line">              log-lib</span><br><span class="line">              log )</span><br></pre></td></tr></table></figure>
+<h2 id="在JNI里定义日志函数"><a href="#在JNI里定义日志函数" class="headerlink" title="在JNI里定义日志函数"></a>在JNI里定义日志函数</h2><p><html>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</html>然后在native-lib.cpp里定义好相关的函数。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">define</span> TAG <span class="meta-string">"JniProject-jni"</span> <span class="comment">// 这个是自定义的LOG的标识</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> LOGD(...) __android_log_print(ANDROID_LOG_DEBUG,TAG ,__VA_ARGS__) <span class="comment">// 定义LOGD调试函数</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> LOGI(...) __android_log_print(ANDROID_LOG_INFO,TAG ,__VA_ARGS__) <span class="comment">// 定义LOGI信息函数</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> LOGW(...) __android_log_print(ANDROID_LOG_WARN,TAG ,__VA_ARGS__) <span class="comment">// 定义LOGW警告函数</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> LOGE(...) __android_log_print(ANDROID_LOG_ERROR,TAG ,__VA_ARGS__) <span class="comment">// 定义错误函数</span></span></span><br></pre></td></tr></table></figure>
+<p><html>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</html>第一行定义了一个TAG，就是日志的名称，跟Android里Log输出的Tag一样。紧接着下面定义了四个函数，分别对应Android的Log几个函数，这里定义的函数名字可以随意命名。</p>
+<h2 id="打印日志信息"><a href="#打印日志信息" class="headerlink" title="打印日志信息"></a>打印日志信息</h2><p><html>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</html>我们在hellorold函数里打印日志，用法如下：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">JNIEXPORT jstring JNICALL</span><br><span class="line">Java_com_geo_util_JniUtil_helloWorld(JNIEnv *env, jclass type) &#123;</span><br><span class="line">    <span class="comment">//打印一个字符串信息</span></span><br><span class="line">    LOGE(<span class="string">"这是一个字符串日志信息"</span>);</span><br><span class="line">    jint a=<span class="number">12</span>;</span><br><span class="line">    jint b = <span class="number">18</span>;</span><br><span class="line">    <span class="comment">//这里可以接很多个输出参数，自行设置即可</span></span><br><span class="line">    LOGE(<span class="string">"这里是数字输出 %s %d %s %d"</span>,<span class="string">"a="</span>,a,<span class="string">" b="</span>,b);</span><br><span class="line">    <span class="keyword">return</span> env-&gt;NewStringUTF(<span class="string">"HelloWorld from C++"</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><html>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</html>当java里调用native方法时，在Logcat控制台就会有日志输入如下图所示：</p>
+<h1 id="Java和JNI参数传递与操作"><a href="#Java和JNI参数传递与操作" class="headerlink" title="Java和JNI参数传递与操作"></a>Java和JNI参数传递与操作</h1><h2 id="JNI和Java中类型的对应关系"><a href="#JNI和Java中类型的对应关系" class="headerlink" title="JNI和Java中类型的对应关系"></a>JNI和Java中类型的对应关系</h2><p><html>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</html>首先我们在java类里定义以下两个方法：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//入参包括了八大基本数据类型</span></span><br><span class="line"><span class="function"><span class="keyword">public</span>  <span class="keyword">native</span> String <span class="title">allTypeParam</span><span class="params">(<span class="keyword">byte</span> a,<span class="keyword">short</span> b,<span class="keyword">int</span> c,<span class="keyword">long</span> d,<span class="keyword">float</span> e,<span class="keyword">double</span> f,<span class="keyword">char</span> g,<span class="keyword">boolean</span> h)</span></span>;</span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">native</span> <span class="keyword">static</span> TestJni <span class="title">referenceParam</span><span class="params">(List&lt;String&gt; list,TestJni jniObj,String name)</span></span>;</span><br><span class="line"><span class="comment">//测试类</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">TestJni</span></span>&#123;</span><br><span class="line">    <span class="keyword">public</span> String name;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">int</span> num;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><html>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</html>其中allTypeParam()方法有八个参数，分别是八大基本数据类型，而referenceParam()方法有三个参数，分别是集合、TestJin对象和一个字符串。</p>
+<p><html>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</html>然后我们看下native-lib.cpp对应的这两个方法：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//有八大基本数据类型的参数</span></span><br><span class="line">JNIEXPORT jstring JNICALL</span><br><span class="line">Java_com_geo_util_JniUtil_allTypeParam(JNIEnv *env, jobject instance, jbyte a, jshort b, jint c,</span><br><span class="line">                                       jlong d, jfloat e, jdouble f, jchar g, jboolean h) &#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> env-&gt;NewStringUTF(<span class="string">"It is OK"</span>);</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//集合、对象、字符串参数</span></span><br><span class="line">JNIEXPORT jobject JNICALL</span><br><span class="line">Java_com_geo_util_JniUtil_referenceParam(JNIEnv *env, jclass type, jobject <span class="built_in">list</span>, jobject jniObj,</span><br><span class="line">                                         jstring name_) &#123;</span><br><span class="line">    <span class="keyword">const</span> <span class="keyword">char</span> *name = env-&gt;GetStringUTFChars(name_, <span class="number">0</span>);</span><br><span class="line">    env-&gt;ReleaseStringUTFChars(name_, name);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><html>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</html>可以看到在java中int对应jni的jint、short对应jshort，完整的类型对应关系如下表所示：</p>
+<table>
+<thead>
+<tr>
+<th>Java对应的类型</th>
+<th>JNI对应的类型</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>byte</td>
+<td>jbyte</td>
+</tr>
+<tr>
+<td>short</td>
+<td>jshort</td>
+</tr>
+<tr>
+<td>byte</td>
+<td>jbyte</td>
+</tr>
+<tr>
+<td>int</td>
+<td>jint</td>
+</tr>
+<tr>
+<td>long</td>
+<td>jlong</td>
+</tr>
+<tr>
+<td>double</td>
+<td>jdouble</td>
+</tr>
+<tr>
+<td>float</td>
+<td>jfloat</td>
+</tr>
+<tr>
+<td>char</td>
+<td>jchar</td>
+</tr>
+<tr>
+<td>boolean</td>
+<td>jboolean</td>
+</tr>
+<tr>
+<td>集合</td>
+<td>jobject</td>
+</tr>
+<tr>
+<td>对象</td>
+<td>jobject</td>
+</tr>
+</tbody>
+</table>
+<h2 id="java传递基本类型到JNI"><a href="#java传递基本类型到JNI" class="headerlink" title="java传递基本类型到JNI"></a>java传递基本类型到JNI</h2><p><html>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</html>上面我们已经定义好了本地方法，并且allTypeParam传递了八个基本类型参数到jni里，首先看下MainAitivity的调用：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">MainActivity</span> <span class="keyword">extends</span> <span class="title">AppCompatActivity</span> </span>&#123;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">onCreate</span><span class="params">(Bundle savedInstanceState)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">super</span>.onCreate(savedInstanceState);</span><br><span class="line">        setContentView(R.layout.activity_main);</span><br><span class="line">        TextView tv = (TextView) findViewById(R.id.sample_text);</span><br><span class="line">        StringBuilder sb = <span class="keyword">new</span> StringBuilder();</span><br><span class="line">        <span class="comment">//调用allTypeParam()本地方法，传递八个基本数据类型</span></span><br><span class="line">        sb.append(<span class="string">"\n\n"</span>+JniUtil.allTypeParam((<span class="keyword">byte</span>)<span class="number">1</span>,(<span class="keyword">short</span>)<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>,<span class="number">5</span>,<span class="number">6</span>,<span class="string">'A'</span>,<span class="keyword">true</span>));</span><br><span class="line">        tv.setText(sb.toString());</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><html>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</html>然后cpp文件里添加打印输出信息：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">JNIEXPORT jstring JNICALL</span><br><span class="line">Java_com_geo_util_JniUtil_allTypeParam(JNIEnv *env, jobject instance, jbyte a, jshort b, jint c,</span><br><span class="line">                                       jlong d, jfloat e, jdouble f, jchar g, jboolean h) &#123;</span><br><span class="line">    LOGE(<span class="string">"allTypeParam %s %d %s %d"</span>, <span class="string">"a="</span>, a, <span class="string">" b="</span>, b);</span><br><span class="line">    LOGE(<span class="string">"allTypeParam %s %d %s %d"</span>, <span class="string">"c="</span>, c, <span class="string">" d="</span>, d);</span><br><span class="line">    LOGE(<span class="string">"allTypeParam %s %d %s %d"</span>, <span class="string">"e="</span>, e, <span class="string">" f="</span>, f);</span><br><span class="line">    LOGE(<span class="string">"allTypeParam %s %d %s %d"</span>, <span class="string">"g="</span>, g, <span class="string">" h="</span>, h);</span><br><span class="line">    <span class="keyword">const</span> <span class="keyword">char</span> * str=<span class="string">"这是来自native层的问候~"</span>;</span><br><span class="line">    <span class="keyword">return</span> env-&gt;NewStringUTF(str);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><html>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</html>运行app，Logcat会输出如下内容：</p>
+<p><img src="http://bmob-cdn-22219.b0.upaiyun.com/2019/01/10/03d5304b40646551800153bd46347d1e.png" alt="image"></p>
+<h2 id="java传递对象到JNI使用"><a href="#java传递对象到JNI使用" class="headerlink" title="java传递对象到JNI使用"></a>java传递对象到JNI使用</h2><p><html>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</html>如果java的本地方法参数是一个对象，那么在jni里要想使用这个对象，比如获取这个对象的属性值、调用这个对象的方法是一件比较“复杂”的事情，具体的我们来看一个例子。</p>
+<p><html>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</html>首先我们在JniUtil里写一个TestJni类，作为内部类，然后写一个native的passObj()方法，此方法有一个TestJni对象参数。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//传递一个对象</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">native</span> <span class="keyword">void</span> <span class="title">passObj</span><span class="params">(TestJni obj)</span></span>;</span><br><span class="line"><span class="comment">//测试类</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">TestJni</span></span>&#123;</span><br><span class="line">    <span class="keyword">public</span> String name;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">int</span> num = <span class="number">25</span>;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">getName</span><span class="params">()</span></span>&#123;</span><br><span class="line">        <span class="keyword">return</span> name;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setName</span><span class="params">(String name)</span></span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.name = name;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><html>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</html>然后MainActivity里调用如下：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">JniUtil.TestJni testJni = <span class="keyword">new</span> JniUtil.TestJni();</span><br><span class="line">testJni.setName(<span class="string">"张三"</span>);</span><br><span class="line"><span class="comment">//调用native方法</span></span><br><span class="line">JniUtil.passObj(testJni);</span><br></pre></td></tr></table></figure>
+<h3 id="JNI调用java对象的属性"><a href="#JNI调用java对象的属性" class="headerlink" title="JNI调用java对象的属性"></a>JNI调用java对象的属性</h3><p><html>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</html>java的本地方法passObj()传递了一个对象给jni，我们看下cpp里是如何通过这个对象获取属性其值的：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">JNIEXPORT <span class="keyword">void</span> JNICALL</span><br><span class="line">Java_com_geo_util_JniUtil_passObj(JNIEnv *env, jclass type, jobject obj) &#123;</span><br><span class="line">    <span class="comment">//获取obj中对象的class</span></span><br><span class="line">    jclass clazz = env-&gt;GetObjectClass( obj);</span><br><span class="line">    <span class="comment">// 获取java中num字段的ID(最后一个参数是age的签名)</span></span><br><span class="line">    jfieldID id_num = env-&gt;GetFieldID( clazz, <span class="string">"num"</span>, <span class="string">"I"</span>);</span><br><span class="line">    <span class="comment">// 获取num字段对应的值</span></span><br><span class="line">    jint num = env-&gt;GetIntField(obj, id_num);</span><br><span class="line">    LOGE(<span class="string">"这个人的编号是: %d\n"</span>, num);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><html>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</html>在第四行是通过jni函数GetObjectClass()来获取class实例，这个函数有个参数就是jobject，也就是我们java传递过来的。第6行是获取字段id，通过Jni的GetFieldId()方法来获取jfieldID实例，注意，这个GetFieldID()有三个参数，第一个参数就是对象的类实例，第二个参数就是java对象的属性名称，第三个参数是函数签名，这个签名的值取决于对象的属性的字段类型，这里的的对象是TestJni对象，他的num是一个int类型，所以这里的签名是I，完整的类型和签名关系如下表所示：</p>
+<table>
+<thead>
+<tr>
+<th>类型</th>
+<th>签名符号</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>boolean</td>
+<td>Z</td>
+</tr>
+<tr>
+<td>byte</td>
+<td>B</td>
+</tr>
+<tr>
+<td>char</td>
+<td>C</td>
+</tr>
+<tr>
+<td>short</td>
+<td>S</td>
+</tr>
+<tr>
+<td>int</td>
+<td>I</td>
+</tr>
+<tr>
+<td>long</td>
+<td>J</td>
+</tr>
+<tr>
+<td>float</td>
+<td>F</td>
+</tr>
+<tr>
+<td>double</td>
+<td>D</td>
+</tr>
+<tr>
+<td>void</td>
+<td>V</td>
+</tr>
+<tr>
+<td>object</td>
+<td>L类名;(举个例子，比如String对象，就是 Ljava/lang/String;)</td>
+</tr>
+<tr>
+<td>Arrays</td>
+<td>[array-type        [数组类型</td>
+</tr>
+<tr>
+<td>methods方法</td>
+<td>(argument-types)return-type     (参数类型)返回类型</td>
+</tr>
+</tbody>
+</table>
+<p><html>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</html>其实很好记，除了boolean、long和object对象类型其他的签名符号都是类型的首字母大写。</p>
+<p><html>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</html>下面我们在TestJni类里定义一下八大基本数据类型，然后再jni里获取他们的值：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">TestJni</span></span>&#123;</span><br><span class="line">    <span class="keyword">public</span> String name;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">byte</span> by= <span class="number">1</span>;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">short</span> sho=<span class="number">2</span>;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">int</span> num=<span class="number">25</span>;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">long</span> lon = <span class="number">3</span>;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">float</span> flo = <span class="number">4.3f</span>;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">double</span> dou =<span class="number">5.5</span>;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">char</span> cha=<span class="string">'D'</span>;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">boolean</span> bool = <span class="keyword">true</span>;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">getName</span><span class="params">()</span></span>&#123;</span><br><span class="line">        <span class="keyword">return</span> name;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setName</span><span class="params">(String name)</span></span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.name = name;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><html>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</html>cpp里根据传递过来的对象获取属性：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">JNIEXPORT <span class="keyword">void</span> JNICALL</span><br><span class="line">Java_com_geo_util_JniUtil_passObj(JNIEnv *env, jclass type, jobject obj) &#123;</span><br><span class="line">    <span class="comment">//获取obj中对象的class</span></span><br><span class="line">    jclass clazz = env-&gt;GetObjectClass( obj);</span><br><span class="line">    <span class="comment">//获取byte类型的值</span></span><br><span class="line">    jbyte byt = env-&gt;GetIntField(obj, env-&gt;GetFieldID( clazz, <span class="string">"by"</span>, <span class="string">"B"</span>));</span><br><span class="line">    <span class="comment">//获取short类型的值</span></span><br><span class="line">    jshort  jsho = env-&gt;GetShortField(obj, env-&gt;GetFieldID( clazz, <span class="string">"sho"</span>, <span class="string">"S"</span>));</span><br><span class="line">    <span class="comment">//获取long类型的值</span></span><br><span class="line">    jlong jlon=env-&gt;GetLongField(obj, env-&gt;GetFieldID( clazz, <span class="string">"lon"</span>, <span class="string">"J"</span>));</span><br><span class="line">    jfloat  jflo=env-&gt;GetFloatField(obj, env-&gt;GetFieldID( clazz, <span class="string">"flo"</span>, <span class="string">"F"</span>));</span><br><span class="line">    jdouble  jdou=env-&gt;GetDoubleField(obj, env-&gt;GetFieldID( clazz, <span class="string">"dou"</span>, <span class="string">"D"</span>));</span><br><span class="line">    jchar  jcha=env-&gt;GetCharField(obj, env-&gt;GetFieldID( clazz, <span class="string">"cha"</span>, <span class="string">"C"</span>));</span><br><span class="line">    jboolean  jbool = env-&gt;GetBooleanField(obj, env-&gt;GetFieldID( clazz, <span class="string">"bool"</span>, <span class="string">"Z"</span>));</span><br><span class="line">    jint num = env-&gt;GetIntField(obj, env-&gt;GetFieldID( clazz, <span class="string">"num"</span>, <span class="string">"I"</span>));</span><br><span class="line">    <span class="comment">//注意，对于字符串的类型，可以通过GetObjectField方法来获取然后强转</span></span><br><span class="line">   jstring  jstr= (jstring) env-&gt;GetObjectField(obj, env-&gt;GetFieldID(clazz, <span class="string">"name"</span>, <span class="string">"Ljava/lang/String;"</span>)); </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><html>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</html>实际上对于每一种类型的值，jni在通过对象获取属性值的时候都有特定的方法来获取，比如GetIntField()、getShortField()。。。等等。比较特殊的是字符串的读取，由于字符串不是基本类型，他没有相应的getStringField()，我们可以通过GetObjectField()方法来获取然后强转成jstring，这个方法有三个参数，第一个参数是对象类实例，第二个参数是对象属性名称，第三个也是签名，他的签名比较特殊，是L+类名的权限定名+”;”构成。</p>
+<h3 id="JNI调用java的方法"><a href="#JNI调用java的方法" class="headerlink" title="JNI调用java的方法"></a>JNI调用java的方法</h3><p><html>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</html>在jni中调用java的方法分为静态方法和非静态方法，静态方法相对来说调用要简单一些。</p>
+<h3 id="jni调用静态java方法"><a href="#jni调用静态java方法" class="headerlink" title="jni调用静态java方法"></a>jni调用静态java方法</h3><p><html>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</html>我们在JniUtil.java里新增加两个方法如下：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//这个是是静态的native方法,由java端调用</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">native</span> <span class="keyword">void</span> <span class="title">notifyJniInvoke</span><span class="params">()</span></span>;</span><br><span class="line"><span class="comment">//这个方法用于Jni调用</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">fromJniInvoke</span><span class="params">()</span></span>&#123;</span><br><span class="line">    Log.e(<span class="string">"JniProject-jni"</span>,<span class="string">"我是被jni调用的"</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><html>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</html>notifyJniInvoke()是由MainActivity里调用的，这个是native方法。第二个方法fromJniInvoke()是Jni里notifyJniInvoke()调用的，我们先看MainActivity里的调用：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//告诉jni去调用java层的方法</span></span><br><span class="line">JniUtil.notifyJniInvoke();</span><br></pre></td></tr></table></figure>
+<p><html>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</html>最后看下native-lib.cpp里notifyJniInvoke()的实现：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">JNIEXPORT <span class="keyword">void</span> JNICALL</span><br><span class="line">Java_com_geo_util_JniUtil_notifyJniInvoke(JNIEnv *env, jclass type) &#123;</span><br><span class="line">    <span class="comment">//注意，因为这个本地方法notifyJniInvoke()在java里是static的，所以此处需要使用GetStaticMethodId来获取methodid</span></span><br><span class="line">    jmethodID  methorId= env-&gt;GetStaticMethodID(type,<span class="string">"fromJniInvoke"</span>,<span class="string">"()V"</span>);</span><br><span class="line">   <span class="comment">//此处调用java方法，由于是静态的，所以不需要对象，直接通过jclass实例和methorid即可</span></span><br><span class="line">    env-&gt;CallStaticVoidMethod(type,methorId);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><html>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</html>可以看到，短短两行代码即可完成java的static方法的调用首先是通过jclass对象获取到方法id，然后使用env实例调用CallStaticVoidMethod()方法即可。</p>
+<p><html>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</html>由于java里的fromJniInvoke()方法是static的，所以在获取方法id时是使用GetStaticMethodId()方法，此方法有三个参数，第一个参数是jclass实例，第二个参数就是java中方法的名字，第三个参数是方法的签名，方法的签名对照表我们在上面已经说过了，这里由于java的fromJniInvoke()是一个无参数无返回值的函数，所以其签名就是”()V”。如果还不清楚的，我这里在列出一些java对应的方法和其jni签名：</p>
+<table>
+<thead>
+<tr>
+<th>java方法</th>
+<th>jni签名</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>void fun()</td>
+<td>()V</td>
+</tr>
+<tr>
+<td>long fun(int a)</td>
+<td>(I)J</td>
+</tr>
+<tr>
+<td>void fun(String a)</td>
+<td>(Ljava/lang/String)V</td>
+</tr>
+<tr>
+<td>String fun(int a,String obj)</td>
+<td>(ILjava/lang/String)Ljava/lang/String</td>
+</tr>
+<tr>
+<td>long fun(byte[] byes)</td>
+<td>([B)J</td>
+</tr>
+</tbody>
+</table>
+<h3 id="jni调用非静态的java方法"><a href="#jni调用非静态的java方法" class="headerlink" title="jni调用非静态的java方法"></a>jni调用非静态的java方法</h3><p><html>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</html>现在我们把JniUtil.java的fromJniInvoke()改为非静态的，那么在native-lib.cpp里notifyJniInvoke()方法应该这样实现：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">JNIEXPORT <span class="keyword">void</span> JNICALL</span><br><span class="line">Java_com_geo_util_JniUtil_notifyJniInvoke(JNIEnv *env, jobject obj) &#123;</span><br><span class="line">    jclass clazz = env-&gt;GetObjectClass( obj);</span><br><span class="line">    <span class="comment">//注意，这个notifyJniInvoke是在java里不是static了，所以此处需要使用GetMethodID来获取methodid</span></span><br><span class="line">    jmethodID  methorId= env-&gt;GetMethodID(clazz,<span class="string">"fromJniInvoke"</span>,<span class="string">"()V"</span>);</span><br><span class="line"><span class="comment">//    //此处调用java方法</span></span><br><span class="line">    env-&gt;CallVoidMethod(obj,methorId);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>#jni创建对象返回到java</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/06/22/CMakeLists.txt文件详解/" rel="next" title="CMakeLists.txt文件详解">
+                <i class="fa fa-chevron-left"></i> CMakeLists.txt文件详解
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/08/23/Volley详解/" rel="prev" title="Volley详解">
+                Volley详解 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">Wili</p>
+              <p class="site-description motion-element" itemprop="description">沉下心来好好耕耘</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">43</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">11</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#HelloWorld"><span class="nav-number">1.</span> <span class="nav-text">HelloWorld</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#JNI文件语法初窥"><span class="nav-number">2.</span> <span class="nav-text">JNI文件语法初窥</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#JNI里打印日志信息"><span class="nav-number">3.</span> <span class="nav-text">JNI里打印日志信息</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#配置日志相关的库"><span class="nav-number">3.1.</span> <span class="nav-text">配置日志相关的库</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#在JNI里定义日志函数"><span class="nav-number">3.2.</span> <span class="nav-text">在JNI里定义日志函数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#打印日志信息"><span class="nav-number">3.3.</span> <span class="nav-text">打印日志信息</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Java和JNI参数传递与操作"><span class="nav-number">4.</span> <span class="nav-text">Java和JNI参数传递与操作</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#JNI和Java中类型的对应关系"><span class="nav-number">4.1.</span> <span class="nav-text">JNI和Java中类型的对应关系</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#java传递基本类型到JNI"><span class="nav-number">4.2.</span> <span class="nav-text">java传递基本类型到JNI</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#java传递对象到JNI使用"><span class="nav-number">4.3.</span> <span class="nav-text">java传递对象到JNI使用</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#JNI调用java对象的属性"><span class="nav-number">4.3.1.</span> <span class="nav-text">JNI调用java对象的属性</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#JNI调用java的方法"><span class="nav-number">4.3.2.</span> <span class="nav-text">JNI调用java的方法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#jni调用静态java方法"><span class="nav-number">4.3.3.</span> <span class="nav-text">jni调用静态java方法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#jni调用非静态的java方法"><span class="nav-number">4.3.4.</span> <span class="nav-text">jni调用非静态的java方法</span></a></li></ol></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Wili</span>
+
+  
+</div>
+
+
+
+
+
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+  
+
+
+
+  
+  
+
+
+
+  
+  
+
+
+
+  
+  
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/canvas-nest/canvas-nest.min.js"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/three/three.min.js"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/three/three-waves.min.js"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/three/canvas_lines.min.js"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/three/canvas_sphere.min.js"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

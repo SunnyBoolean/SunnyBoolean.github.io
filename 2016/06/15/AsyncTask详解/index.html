@@ -1,0 +1,784 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Hexo, NexT">
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="引言&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;我们都知道Android的工作机制是单线程模式的，即所有的屏幕上的事件都是只能在主线程里完成，我们在开发时不能让耗时的任务来阻塞了这个主线程。主线程最主要的任务就是负责刷新屏幕，而且刷新屏幕的事情也只能由主线程来完成，凡是在主线程之外去调用Android相关控件去改变界面的事情都会有问题。 &amp;nbsp;&amp;nbs">
+<meta property="og:type" content="article">
+<meta property="og:title" content="AsyncTask详解">
+<meta property="og:url" content="http://yoursite.com/2016/06/15/AsyncTask详解/index.html">
+<meta property="og:site_name" content="Wili&amp;Demo">
+<meta property="og:description" content="引言&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;我们都知道Android的工作机制是单线程模式的，即所有的屏幕上的事件都是只能在主线程里完成，我们在开发时不能让耗时的任务来阻塞了这个主线程。主线程最主要的任务就是负责刷新屏幕，而且刷新屏幕的事情也只能由主线程来完成，凡是在主线程之外去调用Android相关控件去改变界面的事情都会有问题。 &amp;nbsp;&amp;nbs">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://bmob-cdn-22219.b0.upaiyun.com/2018/12/21/7d2455e44006075a801b661574ac994f.png">
+<meta property="og:updated_time" content="2018-12-21T07:26:01.973Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="AsyncTask详解">
+<meta name="twitter:description" content="引言&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;我们都知道Android的工作机制是单线程模式的，即所有的屏幕上的事件都是只能在主线程里完成，我们在开发时不能让耗时的任务来阻塞了这个主线程。主线程最主要的任务就是负责刷新屏幕，而且刷新屏幕的事情也只能由主线程来完成，凡是在主线程之外去调用Android相关控件去改变界面的事情都会有问题。 &amp;nbsp;&amp;nbs">
+<meta name="twitter:image" content="http://bmob-cdn-22219.b0.upaiyun.com/2018/12/21/7d2455e44006075a801b661574ac994f.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2016/06/15/AsyncTask详解/">
+
+
+
+
+
+  <title>AsyncTask详解 | Wili&Demo</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope="" itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Wili&Demo</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">要想无心很容易，在乎才需要勇气。</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br>
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-schedule">
+          <a href="/schedule/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-calendar"></i> <br>
+            
+            学习计划
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/06/15/AsyncTask详解/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Wili">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Wili&Demo">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">AsyncTask详解</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2016-06-15T17:41:09+08:00">
+                2016-06-15
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
+                  <a href="/categories/Android组件/" itemprop="url" rel="index">
+                    <span itemprop="name">Android组件</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="引言"><a href="#引言" class="headerlink" title="引言"></a>引言</h1><p><html>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</html><br>我们都知道Android的工作机制是单线程模式的，即所有的屏幕上的事件都是只能在主线程里完成，我们在开发时不能让耗时的任务来阻塞了这个主线程。主线程最主要的任务就是负责刷新屏幕，而且刷新屏幕的事情也只能由主线程来完成，凡是在主线程之外去调用Android相关控件去改变界面的事情都会有问题。</p>
+<p><html>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</html>所以当我们需要进行耗时操作的时候都要开启子线程去执行，最典型的就是网络请求必须使用子线程操作，而通常情况下网络请求后就对应着app界面的刷新，界面刷新又不能在子线程里操作，必须在主线程里操作，所以这里就涉及到线程切换的问题，即耗时操作放在子线程、界面刷新的操作要放到主线程。</p>
+<p><html>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</html>对于这种线程切换在Android里可以使用Handler或者AsyncTask类来完成，实际上AsyncTask里也借助了Handler来实现，本文就先分析Asynctask的实现已经注意事项，至于Handler，后面会专门介绍。</p>
+<h1 id="AsyncTask的使用"><a href="#AsyncTask的使用" class="headerlink" title="AsyncTask的使用"></a>AsyncTask的使用</h1><h2 id="创建AsyncTask"><a href="#创建AsyncTask" class="headerlink" title="创建AsyncTask"></a>创建AsyncTask</h2><p><html>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</html>AsyncTask使用很简单，我们只需要继承AsyncTask类，实现其中的doInBackground()和onPostExecute()方法，其他方法都不是必须的，可以按需求重写。</p>
+<p><html>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</html>AsyncTask类有三个泛型参数，第一个参数(Params)表示外部调用Asynctask时传递进来的参数，当调用execute()的时候传入，如果不需要参数，在定义AsyncTask的时候需要给一个Void类型。第二个参数(Progress)是进度，通常我们会给一个数值类型，这个值代表着任务的进度。但是要想用这个功能需要我们自己在doInBackground()方法里手动调用publishProgress(Progress value)来更新进度，在子线程里调用这个方法后，onProgressUpdate(Progress value)就会在主线程里被调用，此时我们就可以在这里做界面更新的操作了。最后一个参数(Result)就是任务执行后的返回值，他是在子线程doInbackGround()里返回，然后抛到onPostExecute(Result res)里，这个res就是最终执行的结果，我们就在这里做界面更新的内容。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">private</span> <span class="class"><span class="keyword">class</span> <span class="title">MyAsyncTask</span> <span class="keyword">extends</span> <span class="title">AsyncTask</span>&lt;<span class="title">Void</span>, <span class="title">Integer</span>, <span class="title">String</span>&gt; </span>&#123;</span><br><span class="line">    <span class="keyword">final</span> String TAG = <span class="string">"AsyncTag"</span>;</span><br><span class="line">    <span class="keyword">int</span> tag;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">MyAsyncTask</span><span class="params">(<span class="keyword">int</span> tag)</span></span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.tag = tag;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">onPreExecute</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">super</span>.onPreExecute();</span><br><span class="line">        Log.e(TAG, <span class="string">"onPreExecute():"</span> + Thread.currentThread().getName()+  <span class="string">"   "</span>+ tag);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">onPostExecute</span><span class="params">(String s)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">super</span>.onPostExecute(s);</span><br><span class="line">        Log.e(TAG, <span class="string">"onPostExecute():"</span> + Thread.currentThread().getName()+  <span class="string">"   "</span>+ tag);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">onProgressUpdate</span><span class="params">(Integer... values)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">super</span>.onProgressUpdate(values);</span><br><span class="line">        Log.e(TAG, <span class="string">"onProgressUpdate():"</span> + Thread.currentThread().getName()+  <span class="string">"   "</span>+ tag);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">onCancelled</span><span class="params">(String s)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">super</span>.onCancelled(s);</span><br><span class="line">        Log.e(TAG, <span class="string">"onCancelled():"</span> + Thread.currentThread().getName()+  <span class="string">"   "</span>+ tag);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">onCancelled</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">super</span>.onCancelled();</span><br><span class="line">        Log.e(TAG, <span class="string">"onCancelled():"</span> + Thread.currentThread().getName()+  <span class="string">"   "</span>+ tag);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">protected</span> String <span class="title">doInBackground</span><span class="params">(Void... voids)</span> </span>&#123;</span><br><span class="line">        Log.e(TAG, <span class="string">"doInBackground():"</span> + Thread.currentThread().getName()+  <span class="string">"   "</span>+ tag);</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>;i&lt;<span class="number">100</span>;i++)&#123;</span><br><span class="line">                Thread.sleep(<span class="number">1000</span>);</span><br><span class="line">                publishProgress(i);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125; <span class="keyword">catch</span> (InterruptedException e) &#123;</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> <span class="string">"返回了结果"</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="执行AsyncTask"><a href="#执行AsyncTask" class="headerlink" title="执行AsyncTask"></a>执行AsyncTask</h2><p><html>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</html>执行AsyncTask有两种方法：<br>1.asyncTask. execute()：这是无参数的调用。</p>
+<p>2.asyncTask.execute(Params….)：有参调用，是一个数组。如果需要参数</p>
+<h2 id="AsyncTask中的方法"><a href="#AsyncTask中的方法" class="headerlink" title="AsyncTask中的方法"></a>AsyncTask中的方法</h2><ol>
+<li>onPreExecute()：这个方法是在主线程里执行，当我们调用execute()方法后，这个onPreExecute()最先被执行，一般在这里做一些准备工作。</li>
+<li>doInbackGround()：这个方法在子线程执行，是我们写核心业务代码的地方，他可以返回值，就是任务执行完毕后的返回值。</li>
+<li>onProgressUpdate()：这个方法只有当我们主动调用了publishProgress()方法才会被调用。一般都是在doinBackGround()方法里调用publishProgress()。</li>
+<li>onCancelled()：当我们调用了task.cancel()方法的时候就会调用这个方法，用于取消任务回调。</li>
+</ol>
+<h1 id="AsyncTask内部实现"><a href="#AsyncTask内部实现" class="headerlink" title="AsyncTask内部实现"></a>AsyncTask内部实现</h1><blockquote>
+<p><html>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</html>首先说结论，在AsyncTask内部维护了一个顺序执行的线程执行器，这个线程执行器是默认的且是static类型的，意味着，无论我们在app的哪个地方创建了多少个AsyncTask对象来执行任务，这些任务都是按先后顺序来按顺序执行的。当然，我们也可以使用自己指定的线程执行器。</p>
+</blockquote>
+<p><html>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</html>其实AsyncTask的代码非常简单，他仅仅是对子线程的任务和主线程的切换进行了一次包装，我们也可以直接把AsyncTask里的源码copy出来自行修改使用。其内部是通过Callable和FutureTask来实现子线程的，同时也使用了顺序的线程执行器(注意这是一个坑)。下图是AsyncTask的执行和线程切换图：</p>
+<p><img src="http://bmob-cdn-22219.b0.upaiyun.com/2018/12/21/7d2455e44006075a801b661574ac994f.png" alt="image"></p>
+<h1 id="AsyncTask注意事项"><a href="#AsyncTask注意事项" class="headerlink" title="AsyncTask注意事项"></a>AsyncTask注意事项</h1><p><html>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</html>根据AsyncTask的特性，在使用他的时候要注意以下事项。</p>
+<h2 id="app里不要大量使用AsyncTask来做非常耗时的操作"><a href="#app里不要大量使用AsyncTask来做非常耗时的操作" class="headerlink" title="app里不要大量使用AsyncTask来做非常耗时的操作"></a>app里不要大量使用AsyncTask来做非常耗时的操作</h2><p><html>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</html>尤其是网络不好的情况下，就不要开启大量的AsyncTask来执行任务，这会导致阻塞，因为AsyncTask内部的线程池是static的，是所有AsyncTask对象共享的，他管理着所有的Asynctask任务，前一个任务没有执行完之前，他是不会执行下一个任务的，所以如果app里大量使用AsyncTask操作非常耗时的操作会导致线程阻塞，我们可以使用自定义的线程执行器，或者直接使用Handler+Message组合来实现线程切换即可避免此问题。</p>
+<p><html>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</html>这个问题在我刚入职那一会被坑的不要不要的，因为老项目都是用的AsyncTask进行网络请求，而app又都是使用vpn在内网使用，网络极度不稳定，客户经常反馈这个问题，最终查找原因才发现是这个问题！无奈只得把所有的AsyncTask去掉，使用Handler来代替了！</p>
+<h2 id="一个Asynctask只能执行一次"><a href="#一个Asynctask只能执行一次" class="headerlink" title="一个Asynctask只能执行一次"></a>一个Asynctask只能执行一次</h2><p><html>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</html>一个AsyncTask只能执行一次，当使用一个asynctask执行execute()之后就不要再次调用，会报错的。AsyncTask在设计上对象就是一次性的，一个对象用完了就表示一个任务执行完成了，就不能重复执行。在使用前最好通过 <strong>AsyncTask.getStatus()== AsyncTask.Status.RUNNING</strong> 判断一下是否正在执行在调用execute()方法。</p>
+<h2 id="AsyncTask导致内存泄漏"><a href="#AsyncTask导致内存泄漏" class="headerlink" title="AsyncTask导致内存泄漏"></a>AsyncTask导致内存泄漏</h2><p><html>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</html>因为AsyncTask的使用场景通常都是内部类，而内部类是默认持有外部类的引用的，比如在一个Activity里使用AsyncTask，如果用户在退出这个界面了，但是AsyncTask依然没有被结束，他还是持有了之前的Activity实例，导致Activity对象无法被回收，从而导致内存泄漏。我们可以通过退出界面取消任务、弱引用来避免此问题。</p>
+<h2 id="调用了cancel-方法，任务不一定会被取消"><a href="#调用了cancel-方法，任务不一定会被取消" class="headerlink" title="调用了cancel()方法，任务不一定会被取消"></a>调用了cancel()方法，任务不一定会被取消</h2><p><html>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</html>如果任务已经执行完了调用cancel方法就不会起到任何作用。</p>
+<h2 id="关于cancel-方法"><a href="#关于cancel-方法" class="headerlink" title="关于cancel()方法"></a>关于cancel()方法</h2><p><html>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</html>一旦调用cancel()成功的取消了任务，那么onPostExecute()方法将不会被执行，所以取消任务后就不要指望在这里更新界面了，而应该在onCancelled()里更新界面，他也是在主线程被调用的。</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2014/10/30/makedown语法练习/" rel="next" title="MakeDown语法">
+                <i class="fa fa-chevron-left"></i> MakeDown语法
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2016/06/19/Handler、Looper、MessageQueue详解/" rel="prev" title="Handler、Looper、MessageQueue详解">
+                Handler、Looper、MessageQueue详解 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">Wili</p>
+              <p class="site-description motion-element" itemprop="description">沉下心来好好耕耘</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">43</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">11</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#引言"><span class="nav-number">1.</span> <span class="nav-text">引言</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#AsyncTask的使用"><span class="nav-number">2.</span> <span class="nav-text">AsyncTask的使用</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#创建AsyncTask"><span class="nav-number">2.1.</span> <span class="nav-text">创建AsyncTask</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#执行AsyncTask"><span class="nav-number">2.2.</span> <span class="nav-text">执行AsyncTask</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#AsyncTask中的方法"><span class="nav-number">2.3.</span> <span class="nav-text">AsyncTask中的方法</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#AsyncTask内部实现"><span class="nav-number">3.</span> <span class="nav-text">AsyncTask内部实现</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#AsyncTask注意事项"><span class="nav-number">4.</span> <span class="nav-text">AsyncTask注意事项</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#app里不要大量使用AsyncTask来做非常耗时的操作"><span class="nav-number">4.1.</span> <span class="nav-text">app里不要大量使用AsyncTask来做非常耗时的操作</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#一个Asynctask只能执行一次"><span class="nav-number">4.2.</span> <span class="nav-text">一个Asynctask只能执行一次</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#AsyncTask导致内存泄漏"><span class="nav-number">4.3.</span> <span class="nav-text">AsyncTask导致内存泄漏</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#调用了cancel-方法，任务不一定会被取消"><span class="nav-number">4.4.</span> <span class="nav-text">调用了cancel()方法，任务不一定会被取消</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#关于cancel-方法"><span class="nav-number">4.5.</span> <span class="nav-text">关于cancel()方法</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Wili</span>
+
+  
+</div>
+
+
+
+
+
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+  
+
+
+
+  
+  
+
+
+
+  
+  
+
+
+
+  
+  
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/canvas-nest/canvas-nest.min.js"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/three/three.min.js"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/three/three-waves.min.js"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/three/canvas_lines.min.js"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/three/canvas_sphere.min.js"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
